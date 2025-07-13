@@ -39,20 +39,39 @@ jobs:
         with:
           payload: |
             {
-              "text": "🚨 Code Convention Check Failed!",
-              "attachments": [
+              "text": "Code Convention Check Failed!",
+              "blocks": [
                 {
-                  "color": "#ff0000",
-                  "pretext": ":rotating_light: *Code Convention Check Failed!*",
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Code Convention Check Failed!*"
+                  }
+                },
+                {
+                  "type": "section",
                   "fields": [
-                    { "title": "Branch", "value": "${{ github.ref_name }}", "short": true },
-                    { "title": "Commit", "value": "${{ github.sha }}", "short": false },
-                    { "title": "Author", "value": "${{ github.actor }}", "short": true },
-                    { "title": "Summary", "value": "${{ steps.read-summary.outputs.summary }}", "short": false }
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n${{ github.ref_name }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:*\n${{ github.sha }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author:*\n${{ github.actor }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Summary:*\n${{ steps.read-summary.outputs.summary }}"
+                    }
                   ]
                 }
               ]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
 
