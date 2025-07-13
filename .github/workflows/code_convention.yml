@@ -34,15 +34,15 @@ jobs:
             tools/code-convention-summary.txt
 
       - name: Slack notification (on failure)
-  if: failure()
-  uses: slackapi/slack-github-action@v1.24.0
-  with:
-    payload: |
-      {
-        "text": "*🚨 Code Convention Check Failed!*\n\n*Branch:* ${{ github.ref_name }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}\n*Summary:*\n${{ steps.read-summary.outputs.summary }}"
-      }
-  env:
-    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "*🚨 Code Convention Check Failed!*\n\n*Branch:* ${{ github.ref_name }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}\n*Summary:*\n${{ steps.read-summary.outputs.summary }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
 
