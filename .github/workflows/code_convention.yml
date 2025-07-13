@@ -23,8 +23,13 @@ jobs:
       - name: Read summary (for Slack)
         id: read-summary
         run: |
-          SUMMARY=$(cat tools/code-convention-summary.txt | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
-          echo "summary=$SUMMARY" >> $GITHUB_OUTPUT
+          if [ -f tools/code-convention-summary.txt ]; then
+            SUMMARY=$(cat tools/code-convention-summary.txt | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+            echo "summary=$SUMMARY" >> $GITHUB_OUTPUT
+          else
+            echo "summary=No summary file found." >> $GITHUB_OUTPUT
+          fi
+
 
       - name: Slack notification (on failure)
         if: failure()

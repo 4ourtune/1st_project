@@ -2,20 +2,19 @@
 
 echo "[Code Convention Check - Linux]"
 
-# 이동: script가 tools/ 안에 있다는 전제
-cd "$(dirname "$0")/.."
-
-# 대상 디렉토리 설정
 SRC_DIRS=("src" "include" "tools/test_code")
 REPORT_FILE="tools/code-convention-report.txt"
 SUMMARY_FILE="tools/code-convention-summary.txt"
 
-# 이전 결과 파일 제거
-rm -f "$REPORT_FILE" "$SUMMARY_FILE"
+mkdir -p tools
+: > "$REPORT_FILE"
+: > "$SUMMARY_FILE"
 
-echo "[Step 1] clang-format check" >> "$REPORT_FILE"
 FORMAT_FAIL=0
+CPPCHECK_FAIL=0
 
+# Step 1: clang-format
+echo "[Step 1] clang-format check" >> "$REPORT_FILE"
 for DIR in "${SRC_DIRS[@]}"; do
   for FILE in "$DIR"/*.[ch]; do
     [ -e "$FILE" ] || continue
@@ -29,36 +28,33 @@ for DIR in "${SRC_DIRS[@]}"; do
   done
 done
 
+# Step 2: cppcheck
 echo "" >> "$REPORT_FILE"
 echo "[Step 2] cppcheck" >> "$REPORT_FILE"
-
-# cppcheck 수행
-CPPCHECK_FAIL=0
 cppcheck --enable=all --std=c99 --quiet -Iinclude "${SRC_DIRS[@]}" 2>> "$REPORT_FILE"
 if grep -q "error:" "$REPORT_FILE"; then
   CPPCHECK_FAIL=1
 fi
 
-# 요약 저장 (Slack 메시지 용)
+# Summary 생성
 if [ $FORMAT_FAIL -ne 0 ]; then
-  echo "clang-format: FAILED" >> "$SUMMARY_FILE"
-else
-  echo "clang-format: PASSED" >> "$SUMMARY_FILE"
+  echo "clang-format check failed." >> "$SUMMARY_FILE"
 fi
-
 if [ $CPPCHECK_FAIL -ne 0 ]; then
-  echo "cppcheck: FAILED" >> "$SUMMARY_FILE"
-else
-  echo "cppcheck: PASSED" >> "$SUMMARY_FILE"
+  echo "cppcheck found errors." >> "$SUMMARY_FILE"
 fi
 
-# 전체 결과 출력
-cat "$REPORT_FILE"
+if [ $FORMAT_FAIL -eq 0 ] && [ $CPPCHECK_FAIL -eq 0 ]; then
+  echo "All checks passed." >> "$SUMMARY_FILE"
+fi
 
-# 종료 코드 처리
+# 전체 출력 (for GitHub Actions)
+cat "$REPORT_FILE"
+cat "$SUMMARY_FILE"
+
+# 종료 코드
 if [ $FORMAT_FAIL -ne 0 ] || [ $CPPCHECK_FAIL -ne 0 ]; then
   exit 1
-else
-  echo "All checks passed." >> "$REPORT_FILE"
-  exit 0
 fi
+
+exit 0
