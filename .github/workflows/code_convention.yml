@@ -1,0 +1,53 @@
+name: Code Convention Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-code-convention:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install tools
+        run: |
+          sudo apt update
+          sudo apt install -y clang-format cppcheck
+
+      - name: Run code convention check
+        id: convention
+        run: |
+          bash tools/check_code_convention.sh
+
+      - name: Read summary (for Slack)
+        id: read-summary
+        run: |
+          SUMMARY=$(cat tools/code-convention-summary.txt | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+          echo "summary=$SUMMARY" >> $GITHUB_OUTPUT
+
+      - name: Slack notification (on failure)
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": ":rotating_light: *Code Convention Check Failed*",
+              "attachments": [
+                {
+                  "color": "#ff0000",
+                  "fields": [
+                    { "title": "Branch", "value": "${{ github.ref_name }}", "short": true },
+                    { "title": "Commit", "value": "${{ github.sha }}", "short": false },
+                    { "title": "Author", "value": "${{ github.actor }}", "short": true },
+                    { "title": "Summary", "value": "${{ steps.read-summary.outputs.summary }}", "short": false }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
