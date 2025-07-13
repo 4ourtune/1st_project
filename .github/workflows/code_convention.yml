@@ -39,6 +39,7 @@ jobs:
         with:
           payload: |
             {
+              "text": "🚨 Code Convention Check Failed!",
               "attachments": [
                 {
                   "color": "#ff0000",
@@ -54,3 +55,4 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
