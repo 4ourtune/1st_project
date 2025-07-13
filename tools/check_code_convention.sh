@@ -1,28 +1,21 @@
 #!/bin/bash
+
 echo "[Code Convention Check - Linux]"
 
-# Define report path
+# 이동: script가 tools/ 안에 있다는 전제
+cd "$(dirname "$0")/.."
+
+# 대상 디렉토리 설정
+SRC_DIRS=("src" "include" "tools/test_code")
 REPORT_FILE="tools/code-convention-report.txt"
+SUMMARY_FILE="tools/code-convention-summary.txt"
 
-# Clear previous report
-rm -f "$REPORT_FILE"
+# 이전 결과 파일 제거
+rm -f "$REPORT_FILE" "$SUMMARY_FILE"
 
-# Define source directories
-SRC_DIRS=()
-[[ -d "src" ]] && SRC_DIRS+=("src")
-[[ -d "include" ]] && SRC_DIRS+=("include")
-[[ -d "tools/test_code" ]] && SRC_DIRS+=("tools/test_code")
-
-# If no source folders found, skip check
-if [ ${#SRC_DIRS[@]} -eq 0 ]; then
-  echo "No source directories found. Skipping checks." >> "$REPORT_FILE"
-  cat "$REPORT_FILE"
-  exit 0
-fi
-
-# Step 1: clang-format
 echo "[Step 1] clang-format check" >> "$REPORT_FILE"
 FORMAT_FAIL=0
+
 for DIR in "${SRC_DIRS[@]}"; do
   for FILE in "$DIR"/*.[ch]; do
     [ -e "$FILE" ] || continue
@@ -36,33 +29,36 @@ for DIR in "${SRC_DIRS[@]}"; do
   done
 done
 
-# Step 2: cppcheck
 echo "" >> "$REPORT_FILE"
 echo "[Step 2] cppcheck" >> "$REPORT_FILE"
 
-INCLUDE_OPTION=""
-[[ -d "include" ]] && INCLUDE_OPTION="-I include"
+# cppcheck 수행
+CPPCHECK_FAIL=0
+cppcheck --enable=all --std=c99 --quiet -Iinclude "${SRC_DIRS[@]}" 2>> "$REPORT_FILE"
+if grep -q "error:" "$REPORT_FILE"; then
+  CPPCHECK_FAIL=1
+fi
 
-cppcheck --enable=all --std=c99 --quiet $INCLUDE_OPTION "${SRC_DIRS[@]}" 2>> "$REPORT_FILE"
+# 요약 저장 (Slack 메시지 용)
+if [ $FORMAT_FAIL -ne 0 ]; then
+  echo "clang-format: FAILED" >> "$SUMMARY_FILE"
+else
+  echo "clang-format: PASSED" >> "$SUMMARY_FILE"
+fi
 
-# Show result
+if [ $CPPCHECK_FAIL -ne 0 ]; then
+  echo "cppcheck: FAILED" >> "$SUMMARY_FILE"
+else
+  echo "cppcheck: PASSED" >> "$SUMMARY_FILE"
+fi
+
+# 전체 결과 출력
 cat "$REPORT_FILE"
 
-# Check for cppcheck errors
-grep "error:" "$REPORT_FILE" > /dev/null
-CPPCHECK_FAIL=$?
-
-# Summary
-if [ $FORMAT_FAIL -ne 0 ]; then
-  echo "clang-format check failed." >> "$REPORT_FILE"
-fi
-if [ $CPPCHECK_FAIL -eq 0 ]; then
-  echo "cppcheck found errors." >> "$REPORT_FILE"
-fi
-
-if [ $FORMAT_FAIL -ne 0 ] || [ $CPPCHECK_FAIL -eq 0 ]; then
+# 종료 코드 처리
+if [ $FORMAT_FAIL -ne 0 ] || [ $CPPCHECK_FAIL -ne 0 ]; then
   exit 1
+else
+  echo "All checks passed." >> "$REPORT_FILE"
+  exit 0
 fi
-
-echo "All checks passed." >> "$REPORT_FILE"
-exit 0
