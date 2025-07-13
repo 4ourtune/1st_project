@@ -1,2 +1,1 @@
-#include<stdio.h>
-void led_on(){printf("LED ON\n");}
+int   bad_format  ( ){return 0;}
