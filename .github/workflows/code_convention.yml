@@ -1,13 +1,6 @@
 name: Code Convention Check
 
-on:
-  push:
-    paths:
-      - '**.c'
-      - '**.h'
-      - '.clang-format'
-      - 'tools/**'
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   code-convention:
