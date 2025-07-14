@@ -2,17 +2,12 @@ name: Code Convention Check
 
 on:
   push:
-    paths:
-      - 'src/**'
-      - 'include/**'
-      - 'tools/test_code/**'
-      - '.clang-format'
   pull_request:
+    branches: [ "master", "develop" ]
     paths:
       - 'src/**'
       - 'include/**'
       - 'tools/test_code/**'
-  workflow_dispatch:
 
 jobs:
   code-convention:
@@ -22,6 +17,9 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
+      - name: Install cppcheck
+        run: sudo apt-get update && sudo apt-get install -y cppcheck
+        
       - name: Run code convention check
         run: bash tools/check_code_convention.sh
 
