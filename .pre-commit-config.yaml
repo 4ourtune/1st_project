@@ -1,0 +1,24 @@
+repos:
+  # 기본적인 공백/줄바꿈 처리
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+
+  # clang-format (자동 포맷)
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v14.0.6
+    hooks:
+      - id: clang-format
+        args: ["--style=file"]
+        files: \.(c|h|cpp|hpp)$
+
+  # cppcheck (misra-c 확인)
+  - repo: local
+    hooks:
+      - id: cppcheck-misra
+        name: cppcheck MISRA
+        entry: bash tools/run_cppcheck_misra.sh
+        language: system
+        pass_filenames: false
