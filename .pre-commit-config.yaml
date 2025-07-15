@@ -24,8 +24,6 @@ repos:
         args:
           - --enable=all
           - --error-exitcode=1
-          - --suppress=missingIncludeSystem
-          - --suppress=unusedFunction
           - --addon=tools/cppcheck_config/misra.json
         pass_filenames: false
         additional_dependencies: []
