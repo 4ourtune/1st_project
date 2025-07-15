@@ -14,11 +14,21 @@ repos:
         args: ["--style=file"]
         files: \.(c|h|cpp|hpp)$
 
-  # cppcheck (misra-c 확인)
-  - repo: local
+  # cppcheck (misra-c 반영)
+  - repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
     hooks:
-      - id: cppcheck-misra
-        name: cppcheck MISRA
-        entry: bash tools/run_cppcheck_misra.sh
-        language: system
+      - id: cppcheck
+        name: Cppcheck MISRA
+        args:
+          - --enable=all
+          - --error-exitcode=1
+          - --suppress=missingIncludeSystem
+          - --suppress=unusedFunction
+          - --addon=tools/cppcheck/addons/misra.py
+          - --checkers-report=tools/cppcheck_checker.txt
+          - --ruleTexts=tools/misra_rule_texts.txt
         pass_filenames: false
+        additional_dependencies: []
+        verbose: true
+        log_file: tools/cppcheck_report.txt
