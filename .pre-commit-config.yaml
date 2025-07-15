@@ -18,6 +18,7 @@ repos:
   - repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
+
       - id: cppcheck
         name: Cppcheck MISRA
         args:
@@ -25,10 +26,8 @@ repos:
           - --error-exitcode=1
           - --suppress=missingIncludeSystem
           - --suppress=unusedFunction
-          - --addon=tools/cppcheck/addons/misra.py
-          - --checkers-report=tools/cppcheck_checker.txt
-          - --ruleTexts=tools/misra_rule_texts.txt
+          - --addon=tools/cppcheck_config/misra.json
         pass_filenames: false
         additional_dependencies: []
         verbose: true
-        log_file: tools/cppcheck_report.txt
+        log_file: tools/cppcheck_config/cppcheck_report.txt
