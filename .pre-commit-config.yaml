@@ -18,14 +18,34 @@ repos:
   - repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
-
       - id: cppcheck
         name: Cppcheck MISRA
         args:
           - --enable=all
           - --error-exitcode=1
           - --addon=tools/cppcheck_config/misra.json
-        pass_filenames: false
+        pass_filenames: true
         additional_dependencies: []
         verbose: true
         log_file: tools/cppcheck_config/cppcheck_report.txt
+
+  # Git 컨벤션 체크
+  - repo: local
+    hooks:
+      # 브랜치 네이밍 컨벤션 체크
+      - id: check-branch-naming
+        name: Check Branch Naming Convention
+        entry: python tools/git_hooks/check_branch_naming.py
+        language: system
+        stages: [pre-commit]
+        always_run: true
+        pass_filenames: false
+
+      # 커밋 메시지 컨벤션 체크
+      - id: check-commit-message
+        name: Check Commit Message Convention
+        entry: python tools/git_hooks/check_commit_message.py
+        language: system
+        stages: [commit-msg]
+        always_run: true
+        pass_filenames: true
