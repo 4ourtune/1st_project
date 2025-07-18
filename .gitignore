@@ -1,2 +1,28 @@
+# Eclipse/ADS specific
+.settings/
+.metadata/
+.ads/
+*.launch
+
+# Build artifacts
+Debug/
+Release/
+output/
+*.o
+*.elf
+*.hex
+*.map
+*.lst
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Editor-specific
+*.swp
+*.autosave
+
+# cppcheck
 tools/cppcheck
 cppcheck_report.txt

@@ -1,20 +1,21 @@
 repos:
-  # 기본적인 공백/줄바꿈 처리
+  # standard handling space/newline
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
 
-  # clang-format (자동 포맷)
+  # clang-format (auto format)
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v14.0.6
+    rev: v20.1.8
     hooks:
       - id: clang-format
         args: ["--style=file"]
         files: \.(c|h|cpp|hpp)$
+        exclude: ^Libraries/
 
-  # cppcheck (misra-c 반영)
+  # cppcheck (include misra-c)
   - repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
@@ -27,12 +28,13 @@ repos:
         pass_filenames: true
         additional_dependencies: []
         verbose: true
+        exclude: ^Libraries/
         log_file: tools/cppcheck_config/cppcheck_report.txt
 
-  # Git 컨벤션 체크
+  # check git convention
   - repo: local
     hooks:
-      # 브랜치 네이밍 컨벤션 체크
+      # check branch naming convention
       - id: check-branch-naming
         name: Check Branch Naming Convention
         entry: python tools/git_hooks/check_branch_naming.py
@@ -41,7 +43,7 @@ repos:
         always_run: true
         pass_filenames: false
 
-      # 커밋 메시지 컨벤션 체크
+      # check commit message convention
       - id: check-commit-message
         name: Check Commit Message Convention
         entry: python tools/git_hooks/check_commit_message.py
