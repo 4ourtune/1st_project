@@ -5,6 +5,7 @@
 *.launch
 
 # Build artifacts
+TriCore Debug (TASKING)/
 Debug/
 Release/
 output/
