@@ -4,6 +4,8 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
+        files: ^(src/|include/)
+
       - id: end-of-file-fixer
         files: ^(src/|include/)
 
