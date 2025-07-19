@@ -5,6 +5,7 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
+        files: ^(src/|include/)
 
   # clang-format (auto format)
   - repo: https://github.com/pre-commit/mirrors-clang-format
@@ -12,7 +13,7 @@ repos:
     hooks:
       - id: clang-format
         args: ["--style=file"]
-        files: \.(c|h|cpp|hpp)$
+        files: ^(src/|include/)
         exclude: ^Libraries/
 
   # cppcheck (include misra-c)
@@ -28,7 +29,7 @@ repos:
         pass_filenames: true
         additional_dependencies: []
         verbose: true
-        exclude: ^Libraries/
+        files: ^(src/|include/)
         log_file: tools/cppcheck_config/cppcheck_report.txt
 
   # check git convention

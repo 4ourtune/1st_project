@@ -60,8 +60,8 @@ def check_commit_message(commit_msg):
     if len(work_content) < 3:
         return False, "Commit description is too short. Please use at least 3 characters."
 
-    if len(first_line.encode('utf-8')) > 100:
-        return False, f"Commit message is too long ({len(first_line.encode('utf-8'))} bytes). Please keep it within 100 bytes."
+    if len(first_line.encode('utf-8')) > 200:
+        return False, f"Commit message is too long ({len(first_line.encode('utf-8'))} bytes). Please keep it within 200 bytes."
 
     return True, f"Valid commit message format. (Jira Key: {jira_key})"
 
