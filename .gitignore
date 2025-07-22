@@ -27,3 +27,6 @@ Thumbs.db
 # cppcheck
 tools/cppcheck
 cppcheck_report.txt
+
+# test
+test/build/
