@@ -1,8 +1,6 @@
 # Eclipse/ADS specific
-.settings/
 .metadata/
 .ads/
-*.launch
 
 # Build artifacts
 TriCore Debug (TASKING)/
