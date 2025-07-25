@@ -23,32 +23,6 @@ void Asclin1RxIsrHandler(void)
 {
     char c = Asclin1_InUart();
     
-    if (c == 'w' || c == 'W' || c == 's' || c == 'S' || 
-        c == 'a' || c == 'A' || c == 'd' || c == 'D' || 
-        c == 'x' || c == 'X' || c == ' ')
-    {
-        g_uart_buffer[0] = c;
-        g_uart_buffer[1] = '\0';
-        g_uart_buffer_index = 1;
-        g_uart_command_ready = 1;
-    }
-    else if (c == '\0')
-    {
-        g_uart_buffer[g_uart_buffer_index] = '\0';
-        g_uart_command_ready = 1;
-    }
-    else if (g_uart_buffer_index < CCU_BUFFER_SIZE - 1)
-    {
-        g_uart_buffer[g_uart_buffer_index++] = c;
-    }
-    else
-    {
-        g_uart_buffer_index = 0;
-        g_uart_buffer[0] = 'E';
-        g_uart_buffer[1] = '\0';
-        g_uart_command_ready = 1;
-    }
-    
     Asclin1_OutUart(c);
 }
 
