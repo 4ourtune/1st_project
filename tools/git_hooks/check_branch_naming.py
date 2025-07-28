@@ -26,10 +26,10 @@ def check_branch_naming(branch_name):
 
     # Define branch naming patterns
     patterns = {
-        'feature': r'^feature/[A-Z]+-\d+-[a-z0-9-]+$',
+        'feature': r'^feature/[A-Z]+-\d+-[a-z0-9A-Z-]+$',
         'release': r'^release/[A-Z]+-\d+-v\d+\.\d+\.\d+$',
-        'hotfix':  r'^hotfix/[A-Z]+-\d+-[a-z0-9-]+$',
-        'bugfix':  r'^bugfix/[A-Z]+-\d+-[a-z0-9-]+$'
+        'hotfix':  r'^hotfix/[A-Z]+-\d+-[a-z0-9A-Z-]+$',
+        'bugfix':  r'^bugfix/[A-Z]+-\d+-[a-z0-9A-Z-]+$'
     }
 
     # Check if branch matches any pattern
