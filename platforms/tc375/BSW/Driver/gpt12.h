@@ -1,15 +1,16 @@
 #ifndef BSW_DRIVER_GPT12_H_
 #define BSW_DRIVER_GPT12_H_
 
-unsigned int getcntDelay(void);
-void setcntDelay(unsigned int n);
+#include <Ifx_reg.h>
+#include <Ifx_Types.h>
+#include <IfxGpt12.h>
+#include <IfxPort.h>
 
-void gpt12_Init(void);
+#include "isr_priority.h"
+#include "Ultrasonic.h"
+#include "aeb.h"
+#include "aps.h"
 
-void runGpt12_T3(void);
-void stopGpt12_T3(void);
-void runGpt12_T6(void);
-void stopGpt12_T6(void);
-
+void Gpt1_Init (void);
 
 #endif /* BSW_DRIVER_GPT12_H_ */
