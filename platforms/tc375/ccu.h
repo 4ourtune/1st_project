@@ -1,7 +1,15 @@
-#ifndef CCU_H
-#define CCU_H
+#ifndef CCU_H_
+#define CCU_H_
 
-void CCU_Init(void);
-void CCU_Run(void);
+#include <stdlib.h>
+#include "my_stdio.h"
 
-#endif /* CCU_H */
+#include "str_queue.h"
+#include "motor_controller.h"
+
+#include "aeb.h"
+#include "aps.h"
+
+void run_ccu (void);
+
+#endif /* CCU_H_ */
