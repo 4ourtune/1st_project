@@ -8,4 +8,6 @@ void MotorController_Init(void);
 bool MotorController_ProcessJoystickInput(int x, int y);
 bool MotorController_ProcessWASDInput(char key);
 
+int MotorController_GetMotorChA();
+int MotorController_GetMotorChB();
 #endif /* MOTOR_CONTROLLER_H */
