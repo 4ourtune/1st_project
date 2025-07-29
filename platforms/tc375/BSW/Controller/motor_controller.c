@@ -15,7 +15,7 @@ void MotorController_Init(void)
 }
 
 /*-100 <= speed <= 100*/
-int MotorController_GetMotorChA()
+int MotorController_GetMotorChA(void)
 {
     if (g_motorChA_Direction == 1){
         return g_motorChA_Speed;
@@ -25,7 +25,7 @@ int MotorController_GetMotorChA()
 }
 
 /*-100 <= speed <= 100*/
-int MotorController_GetMotorChB()
+int MotorController_GetMotorChB(void)
 {
     if (g_motorChB_Direction == 1){
         return g_motorChB_Speed;
