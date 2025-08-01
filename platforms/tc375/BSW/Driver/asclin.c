@@ -149,66 +149,7 @@ void Asclin1RxIsrHandler (void)
 {
     char ch = Asclin1_InUart();
     
-    if (ch == 'w' || ch == 'W' ||
-        ch == 'a' || ch == 'A' ||
-        ch == 's' || ch == 'S' ||
-        ch == 'd' || ch == 'D' ||
-        ch == 'x' || ch == 'X')
-    {
-        MotorController_ProcessWASDInput(ch);
-    }
-    else if(ch == '0')
-    {
-        MotorController_SetSpeed(0,0);
-    }
-    else if(ch == '1')
-    {
-        MotorController_SetSpeed(10,10);
-    }
-    else if(ch == '2')
-    {
-        MotorController_SetSpeed(20,20);
-    }
-    else if(ch == '3')
-    {
-        MotorController_SetSpeed(30,30);
-    }
-    else if(ch == '4')
-    {
-        MotorController_SetSpeed(40,40);
-    }
-    else if(ch == '5')
-    {
-        MotorController_SetSpeed(50,50);
-    }
-    else if(ch == '6')
-    {
-        MotorController_SetSpeed(60,60);
-    }
-    else if(ch == '7')
-    {
-        MotorController_SetSpeed(70,70);
-    }
-    else if(ch == '8')
-    {
-        MotorController_SetSpeed(80,80);
-    }
-    else if(ch == '9')
-    {
-        MotorController_SetSpeed(90,90);
-    }
-    else if(ch == '-')
-    {
-        MotorController_SetSpeed(100,100);
-    }
-    else if (ch == 'T' || ch == 't')
-    {
-        BrakeTest_CheckCurrentDistance();
-    }
-    else
-    {
-        queue_push_char(ch);
-    }
+    queue_push_char(ch);
 }
 
 /* Initialise asynchronous interface to operate at baudrate,8,n,1 */
