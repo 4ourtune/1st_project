@@ -12,7 +12,6 @@ void IsrGpt1T3Handler (void)
     IsrGpt1T3Handler_Cnt++;
     if (IsrGpt1T3Handler_Cnt >= 10) // 100ms
     {
-        Set_AEB_State();
         IsrGpt1T3Handler_Cnt = 0;
     }
 
