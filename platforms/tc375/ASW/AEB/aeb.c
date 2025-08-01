@@ -9,11 +9,9 @@ bool AEB_IsEmergencyBrakingRequired(void)
 {
     unsigned int distance_mm = Tof_GetCorrectedDistance();
 
-    //my_printf("[TOF] %4u mm \n", distance_mm);
-
-    // 1순위: 50cm 이하면 무조건 긴급제동
-    if (distance_mm <= 500)
-    { // 50cm = 500mm
+    // 1순위: 10cm + 허용오차 이하면 무조건 긴급제동
+    if (distance_mm <= AEB_EMERGENCY_THRESHOLD_MM + AEB_TOLERANCE_MM)
+    {
         return true;
     }
 
@@ -22,14 +20,21 @@ bool AEB_IsEmergencyBrakingRequired(void)
 
     int vehicle_speed = (motorA_speed + motorB_speed) / 2;
 
+    /* -100 <= vehicle_speed <= 100, 제자리 회전 안됨 */
     if (vehicle_speed <= 0)
     {
         return false;
     }
 
-    unsigned int braking_distance_mm = AEB_SPEED_COEFFICIENT * vehicle_speed * vehicle_speed / AEB_SPEED_DIVIDER;
+    // 실측 데이터 기반 제동거리 계산 (완전이차 모델: ax²+bx+c)
+    // braking_distance = (AEB_SPEED_COEFF_A * speed² + AEB_SPEED_COEFF_B * speed + AEB_SPEED_COEFF_C) / AEB_SPEED_DIVIDER
+    int speed_squared = vehicle_speed * vehicle_speed;
+    int numerator = AEB_SPEED_COEFF_A * speed_squared + AEB_SPEED_COEFF_B * vehicle_speed + AEB_SPEED_COEFF_C;
+    unsigned int braking_distance_mm = (unsigned int)(numerator / AEB_SPEED_DIVIDER);
 
-    if (distance_mm <= (braking_distance_mm + AEB_SAFETY_MARGIN_MM))
+    // 제동 조건: 제동 후 목표 정지거리(10cm)에 정확히 멈추도록
+    // distance_mm = braking_distance_mm + AEB_EMERGENCY_THRESHOLD_MM 일 때 제동 시작
+    if (distance_mm <= (braking_distance_mm + AEB_EMERGENCY_THRESHOLD_MM))
     {
         return true;
     }
@@ -60,42 +65,4 @@ void AEB_SetState(int state)
     {
         aeb_state = state;
     }
-}
-
-static int test_phase = 0;
-static unsigned int test_start_distance = 0;
-static unsigned int test_stop_distance = 0;
-static int test_target_speed = 0;
-
-void AEB_TestBrakingDistance(int target_speed)
-{
-    test_target_speed = target_speed;
-
-    switch (test_phase)
-    {
-    case 0:
-        test_start_distance = Tof_GetCorrectedDistance();
-        test_phase = 1;
-        break;
-
-    case 1:
-        if (Tof_GetCorrectedDistance() <= AEB_TRIGGER_DISTANCE_MM)
-        {
-            test_phase = 2;
-        }
-        break;
-
-    case 2:
-        test_stop_distance = Tof_GetCorrectedDistance();
-        test_phase = 0;
-        break;
-    }
-}
-
-void AEB_ResetTestState(void)
-{
-    test_phase = 0;
-    test_start_distance = 0;
-    test_stop_distance = 0;
-    test_target_speed = 0;
 }
