@@ -1,0 +1,50 @@
+=== Brake Distance Check ===
+current motor speed : 30
+[start brake distance] :  464 mm
+end brake Distance: 408 mm
+====================
+=== Brake Distance Check ===
+current motor speed : 40
+[start brake distance] :  487 mm
+end brake Distance: 384 mm
+====================
+=== Brake Distance Check ===
+current motor speed : 50
+[start brake distance] :  470 mm
+end brake Distance: 323 mm
+====================
+=== Brake Distance Check ===
+current motor speed : 60
+[start brake distance] :  489 mm
+end brake Distance: 311 mm
+====================
+=== Brake Distance Check ===
+current motor speed : 70
+[start brake distance] :  483 mm
+end brake Distance: 274 mm
+====================
+=== Brake Distance Check ===
+current motor speed : 80
+[start brake distance] :  469 mm
+end brake Distance: 243 mm
+====================
+=== Brake Distance Check ===
+current motor speed : 90
+[start brake distance] :  460 mm
+end brake Distance: 211 mm
+====================
+=== Brake Distance Check ===
+current motor speed : 90
+[start brake distance] :  460 mm
+end brake Distance: 211 mm
+====================
+=== Brake Distance Check ===
+current motor speed : 100
+[start brake distance] :  542 mm
+end brake Distance: 278 mm
+====================
+
+
+
+
+

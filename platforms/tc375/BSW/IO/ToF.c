@@ -26,20 +26,20 @@ void TofIsrHandler(void)
 // 안전하게 거리 정보를 가져오는 함수
 void Tof_GetDistance(unsigned int* dist_mm, unsigned short* signal, unsigned char* status, uint64* timestamp_us)
 {
-    __disable();
+    //__disable();
     *dist_mm = g_TofValue;
     *signal = g_SignalStrength;
     *status = g_DisStatus;
     *timestamp_us = g_TofTimestampUs;
-    __enable();
+    //__enable();
 }
 
 // 거리 보정 함수: 보정된 거리 값 리턴 (단위: mm)
 unsigned int Tof_GetCorrectedDistance(void)
 {
-    __disable();
+    //__disable();
     unsigned int raw = g_TofValue;
-    __enable();
+    //__enable();
 
     int corrected = (int)raw - 50; // 50mm 보정
     if (corrected < 0)

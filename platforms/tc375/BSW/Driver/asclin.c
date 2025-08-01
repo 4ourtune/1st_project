@@ -1,11 +1,12 @@
 #include "asclin.h"
 
-//IFX_INTERRUPT(Asclin0RxIsrHandler, 0, ISR_PRIORITY_ASCLIN0_RX);
-//void Asclin0RxIsrHandler (void)
-//{
-//    char ch = Asclin0_InUart();
-//    Asclin0_OutUart(ch);
-//}
+ IFX_INTERRUPT(Asclin0RxIsrHandler, 0, ISR_PRIORITY_ASCLIN0_RX);
+ void Asclin0RxIsrHandler (void)
+ {
+     char ch = Asclin0_InUart();
+
+     Asclin0_OutUart(ch);
+ }
 
 void Asclin0_InitUart (void)
 {
@@ -61,13 +62,13 @@ void Asclin0_InitUart (void)
     MODULE_ASCLIN0.FLAGSSET.U = (IFX_ASCLIN_FLAGSSET_TFLS_MSK << IFX_ASCLIN_FLAGSSET_TFLS_OFF);
 
     /* Initialize ASCLIN0 RX interrupt */
-//    volatile Ifx_SRC_SRCR *src;
-//    src = (volatile Ifx_SRC_SRCR*) (&MODULE_SRC.ASCLIN.ASCLIN[0].RX);
-//    src->B.SRPN = ISR_PRIORITY_ASCLIN0_RX;
-//    src->B.TOS = 0;
-//    src->B.CLRR = 1; /* clear request */
-//    MODULE_ASCLIN0.FLAGSENABLE.B.RFLE = 1; /* enable rx fifo fill level flag */
-//    src->B.SRE = 1; /* interrupt enable */
+    volatile Ifx_SRC_SRCR *src;
+    src = (volatile Ifx_SRC_SRCR*) (&MODULE_SRC.ASCLIN.ASCLIN[0].RX);
+    src->B.SRPN = ISR_PRIORITY_ASCLIN0_RX;
+    src->B.TOS = 0;
+    src->B.CLRR = 1; /* clear request */
+    MODULE_ASCLIN0.FLAGSENABLE.B.RFLE = 1; /* enable rx fifo fill level flag */
+    src->B.SRE = 1; /* interrupt enable */
 }
 
 /* Send character CHR via the serial line */
@@ -145,6 +146,7 @@ IFX_INTERRUPT(Asclin1RxIsrHandler, 0, ISR_PRIORITY_ASCLIN1_RX);
 void Asclin1RxIsrHandler (void)
 {
     char ch = Asclin1_InUart();
+    
     queue_push_char(ch);
 }
 
