@@ -2,7 +2,6 @@
 #define BSW_DRIVER_STM_H_
 
 #include "Ifx_Types.h"
-#include "stm.h"
 #include "IfxStm.h"
 
 uint64 getTime10ns (void);

@@ -1,19 +1,16 @@
 #include "system_init.h"
-#include "BSW/Driver/asclin.h"
-#include "BSW/IO/Bluetooth.h"
-#include "BSW/IO/Motor.h"
-#include "can.h"
-#include "canfd.h"
 
 void Module_Init (void)
 {
     Gpt1_Init();
+    scueru_Init0();
+    scueru_Init1();
+    scueru_Init2();
+    Ultrasonic_Trigger_Init();
+    Can_Init(BD_500K, CAN_NODE0);
     Motor_Init();
     Asclin1_InitUart();
     Asclin0_InitUart(); // for debug
-
-    Can_Init(BD_500K, CAN_NODE0);
-    CanFd_Init(BD_500K, HS_BD_2M, CANFD_NODE2);
 }
 
 IFX_ALIGN(4) IfxCpu_syncEvent g_cpuSyncEvent = 0;
