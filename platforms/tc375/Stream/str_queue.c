@@ -9,8 +9,6 @@ static int tail = 0; // Write 위치
 
 void queue_push_char (char ch)
 {
-    if (ch == '\n')
-        return;
     buffer[tail] = ch;
     tail = NEXT(tail);
     if (head == tail) // 버퍼 가득참

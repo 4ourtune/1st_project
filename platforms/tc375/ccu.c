@@ -1,6 +1,6 @@
 #include "ccu.h"
 
-#define BUF_SIZE 16
+#define BUF_SIZE 8
 #define MOTOR_STOP 50
 
 void run_ccu (void)
@@ -65,11 +65,11 @@ void run_ccu (void)
 
         if (motor_valid)
         {
-            my_printf("%d %d\n", motor_x, motor_y);
-            int ret = MotorController_ProcessJoystickInput(motor_x, motor_y); // Controll motor
-        }
+//            my_printf("%d %d\n", motor_x, motor_y);
+            motor_valid = MotorController_ProcessJoystickInput(motor_x, motor_y); // Controll motor
 
-        pre_motor_x = motor_x;
-        pre_motor_y = motor_y;
+            pre_motor_x = motor_x;
+            pre_motor_y = motor_y;
+        }
     }
 }
