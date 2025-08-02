@@ -23,37 +23,37 @@
 /*********************************************************************************************************************/
 typedef struct
 {
-    IfxCan_Can_Config canConfig;                            /* CAN module configuration structure                   */
-    IfxCan_Can canModule;                                   /* CAN module handle                                    */
-    IfxCan_Can_Node canSrcNode;                             /* CAN source node handle data structure                */
-    IfxCan_Can_Node canDstNode;                             /* CAN destination node handle data structure           */
-    IfxCan_Can_NodeConfig canNodeConfig;                    /* CAN node configuration structure                     */
-    IfxCan_Filter canFilter;                                /* CAN filter configuration structure                   */
-    IfxCan_Message txMsg;                                   /* Transmitted CAN message structure                    */
-    IfxCan_Message rxMsg;                                   /* Received CAN message structure                       */
-    uint8 txData[8];                                        /* Transmitted CAN data array                           */
-    uint8 rxData[8];                                        /* Received CAN data array                              */
+    IfxCan_Can_Config canConfig; /* CAN module configuration structure                   */
+    IfxCan_Can canModule; /* CAN module handle                                    */
+    IfxCan_Can_Node canSrcNode; /* CAN source node handle data structure                */
+    IfxCan_Can_Node canDstNode; /* CAN destination node handle data structure           */
+    IfxCan_Can_NodeConfig canNodeConfig; /* CAN node configuration structure                     */
+    IfxCan_Filter canFilter; /* CAN filter configuration structure                   */
+    IfxCan_Message txMsg; /* Transmitted CAN message structure                    */
+    IfxCan_Message rxMsg; /* Received CAN message structure                       */
+    uint8 txData[8]; /* Transmitted CAN data array                           */
+    uint8 rxData[8]; /* Received CAN data array                              */
 } McmcanType;
 
-typedef enum {
-    BD_NOUSE = 0,
-    BD_500K = 1,
-    BD_1M = 2
+typedef enum
+{
+    BD_NOUSE = 0, BD_500K = 1, BD_1M = 2
 } CAN_BAUDRATES;
 
-typedef enum {
+typedef enum
+{
     CAN_NODE0 = 0, /* CAN Node 0 for lite kit */
-    CAN_NODE2 = 2  /* CAN Node 2 for mikrobus */
+    CAN_NODE2 = 2 /* CAN Node 2 for mikrobus */
 } CAN_NODE;
 
 /*********************************************************************************************************************/
 /*-----------------------------------------------Function Prototypes-------------------------------------------------*/
 /*********************************************************************************************************************/
-void Can_Init(CAN_BAUDRATES ls_baudrate, CAN_NODE CAN_Node);
-void Can_SetFilterRange(uint32 start, uint32 end);
-void Can_SetFilterMask(uint32 id, uint32 mask);
+void Can_Init (CAN_BAUDRATES ls_baudrate, CAN_NODE CAN_Node);
+void Can_SetFilterRange (uint32 start, uint32 end);
+void Can_SetFilterMask (uint32 id, uint32 mask);
 
-void Can_SendMsg(unsigned int id, const char *txData, int len);
-int Can_RecvMsg(unsigned int *id, char *rxData, int *len);
+void Can_SendMsg (unsigned int id, const char *txData, int len);
+int Can_RecvMsg (unsigned int *id, char *rxData, int *len);
 
 #endif /* CAN_H_ */

@@ -145,6 +145,8 @@ IFX_INTERRUPT(Asclin1RxIsrHandler, 0, ISR_PRIORITY_ASCLIN1_RX);
 void Asclin1RxIsrHandler (void)
 {
     char ch = Asclin1_InUart();
+    if (ch == '\n')
+        return;
     queue_push_char(ch);
 }
 

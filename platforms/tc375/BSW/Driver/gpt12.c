@@ -1,24 +1,31 @@
 #include "gpt12.h"
-
-static const int GPT1_BLOCK_PRESCALER = 0x2; /* Set GPT1 block prescaler: 32=2^5 */
-static const int TIMER_T3_INPUT_PRESCALER = 0x1; /* Set T3 input prescaler: 2^1=2 */
-static const int TIMER_T3_T2_VALUE = 15624; /* Set timer T3 value: 5^6-1=15624 */
-
-static uint64 IsrGpt1T3Handler_Cnt;
+// fGPT = 100MHz = 10^8Hz = (2^8 * 5^8)Hz
+static const int GPT1_BLOCK_PRESCALER = 0x2; // Set GPT1 block prescaler: 2^5 = 32
+static const int TIMER_T3_INPUT_PRESCALER = 0x0; // Set T3 input prescaler: 2^0 = 0
+static const int TIMER_T3_T2_VALUE = 3125; // Set timer T3, T2 value: 5^5 = 3125
 
 IFX_INTERRUPT(IsrGpt1T3Handler, 0, ISR_PRIORITY_GPT1T3_TIMER);
-void IsrGpt1T3Handler (void)
+void IsrGpt1T3Handler (void) // (2^3 * 5^3)Hz = 1000Hz = 0.001sec = 1ms
 {
-    IsrGpt1T3Handler_Cnt++;
-    if (IsrGpt1T3Handler_Cnt >= 10) // 100ms
+    static int aeb_cnt = 0;
+    static int ult_cnt = 0;
+
+    aeb_cnt = (aeb_cnt + 1) % 100; // 100ms
+    ult_cnt = (ult_cnt + 1) % 40; // 40ms
+
+    if (aeb_cnt == 1)
     {
-        Set_AEB_State();
-        IsrGpt1T3Handler_Cnt = 0;
+        // AEB
     }
 
-    if (Get_APS_State() == 1) // 10ms
+    if (Get_APS_State() == 1)
     {
-        Trigger_Ultrasonic();
+
+        if (ult_cnt == 1 || ult_cnt == 2)
+        {
+            // Ultrasonic sensor: Set the period to 40ms. 38ms(Max echo back pulse duration) + 2ms(Margin including trigger pulse)
+            Toggle_Ultrasonic_Trigger();
+        }
     }
 }
 
