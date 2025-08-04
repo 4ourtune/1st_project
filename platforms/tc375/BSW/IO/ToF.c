@@ -5,7 +5,7 @@ static unsigned short g_SignalStrength = 0;
 static unsigned char g_DisStatus = 0;
 static uint64 g_TofTimestampUs = 0;
 
-void TofHandler (char *rxData, int rxLen)
+void TofHandler (unsigned char *rxData, int rxLen)
 {
     // ToF sensor: The data update frequency is 30Hz(33.333..ms)
     g_TofTimestampUs = getTimeUs();

@@ -2,7 +2,7 @@
 
 #define BUF_SIZE 8
 #define MOTOR_STOP 50
-#define CYCLE_INTERVAL_US 100000 // 100000us = 100ms
+#define CYCLE_INTERVAL_US 40000 // 40000us = 40ms
 
 void run_ccu (void)
 {
