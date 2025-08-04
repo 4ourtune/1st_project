@@ -34,26 +34,33 @@ typedef enum {
 // extern int result_y;        // APS가 판단한 속도 명령 (0~99, 50: 정지)
 // extern int is_APS_done;     // APS 주차 완료 플래그 (0: 진행중, 1: 완료)
 
-// 센서 데이터 배열
-extern unsigned int sense_dist[SENSOR_DATA_COUNT];
-extern uint64_t sense_time[SENSOR_DATA_COUNT];
+// // 센서 데이터 배열
+// extern unsigned int sense_dist[SENSOR_DATA_COUNT];
+// extern uint64_t sense_time[SENSOR_DATA_COUNT];
 
 // APS 상태 관리
 int Get_APS_State(void);
 void Set_APS_State(int state);
 
-// 공간 탐지 및 상태 관리 함수
-APS_WallSpaceState_t APS_AnalyzeSpace(int distance);
-void APS_ProcessStateTransition(APS_WallSpaceState_t new_state);
+// // 공간 탐지 및 상태 관리 함수
+// APS_WallSpaceState_t APS_AnalyzeSpace(int distance);
+// void APS_ProcessStateTransition(APS_WallSpaceState_t new_state);
 float APS_CalculateSpaceSize(uint64_t start_time, uint64_t end_time);
-bool APS_DetectParkingSpace(void);
+// bool APS_DetectParkingSpace(void);
 
-// APS 명령 및 상태 관리 함수
+// // APS 명령 및 상태 관리 함수
 void Calc_APS_Result(void);
-int Update_APS_Result(uint64_t interval_us);//
-int APS_CalculateSteeringFromSensor(int sensor_distance);//
+int Update_APS_Result(uint64_t interval_us);
+// int APS_CalculateSteeringFromSensor(int sensor_distance);
 
 // APS 외부 인터페이스
 void Get_APS_Result(int *res_x, int *res_y, int *is_done);
+
+// APS 재시작 함수
+void APS_Restart(void);
+
+// APS 초기화 함수
+void APS_Init(void);
+
 
 #endif /* ASW_APS_APS_H_ */
