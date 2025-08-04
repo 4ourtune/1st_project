@@ -5,11 +5,11 @@
 #include "IfxCpu.h"
 #include "IfxScuWdt.h"
 
-#include "gpt12.h"
+#include "Motor.h"
 #include "eru.h"
 #include "Ultrasonic.h"
+#include "gpt12.h"
 #include "can.h"
-#include "Motor.h"
 #include "asclin.h"
 
 void System_Init (void);

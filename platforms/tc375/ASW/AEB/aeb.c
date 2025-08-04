@@ -42,8 +42,10 @@ bool AEB_IsEmergencyBrakingRequired(void)
     return false;
 }
 
-void AEB_UpdateState(void)
+int AEB_UpdateState(uint64 interval_us)
 {
+    // interval_us보다 오래된 센서 값이 있으면 return false (업데이트 실패)
+
     if (AEB_IsEmergencyBrakingRequired())
     {
         aeb_state = AEB_STATE_EMERGENCY;
@@ -52,9 +54,10 @@ void AEB_UpdateState(void)
     {
         aeb_state = AEB_STATE_NORMAL;
     }
+    return true;
 }
 
-int Get_AEB_State(void)
+int AEB_GetState(void)
 {
     return aeb_state;
 }

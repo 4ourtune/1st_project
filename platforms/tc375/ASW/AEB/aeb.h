@@ -2,6 +2,7 @@
 #define AEB_H_
 
 #include <stdbool.h>
+#include "Ifx_Types.h"
 
 #define AEB_STATE_NORMAL    0
 #define AEB_STATE_EMERGENCY 1
@@ -33,13 +34,13 @@
 
 모델 성능 지표:
 - 평균 절대 오차: 1.75mm (목표: ±5mm 이하)
-- 최대 절대 오차: 5mm 
+- 최대 절대 오차: 5mm
 - 결정계수 (R²): 99.87% (매우 높은 정확도)
 - 평균 오차율: 1.16%
 
 완전이차 모델 계수 (정수 연산 최적화):
 - AEB_SPEED_COEFF_A = -275      (속도² 계수: -0.0275)
-- AEB_SPEED_COEFF_B = 64964     (속도¹ 계수: 6.4964)  
+- AEB_SPEED_COEFF_B = 64964     (속도¹ 계수: 6.4964)
 - AEB_SPEED_COEFF_C = -1126429  (상수항: -112.6429)
 - AEB_SPEED_DIVIDER = 10000     (정수 연산을 위한 스케일링)
 
@@ -70,8 +71,8 @@
 */
 
 bool AEB_IsEmergencyBrakingRequired(void);
-void AEB_UpdateState(void);
-int Get_AEB_State(void);
+int AEB_UpdateState(uint64 interval_us);
+int AEB_GetState(void);
 
 /*테스트 및 디버깅용*/
 void AEB_SetState(int state);

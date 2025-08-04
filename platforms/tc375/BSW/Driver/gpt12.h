@@ -8,8 +8,6 @@
 
 #include "isr_priority.h"
 #include "Ultrasonic.h"
-#include "aeb.h"
-#include "aps.h"
 
 void Gpt1_Init (void);
 

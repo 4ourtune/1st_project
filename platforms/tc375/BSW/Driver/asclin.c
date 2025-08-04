@@ -145,9 +145,7 @@ IFX_INTERRUPT(Asclin1RxIsrHandler, 0, ISR_PRIORITY_ASCLIN1_RX);
 void Asclin1RxIsrHandler (void)
 {
     char ch = Asclin1_InUart();
-    if (ch == '\n')
-        return;
-    queue_push_char(ch);
+    bluetooth_rx_queue_push_char(ch);
 }
 
 /* Initialise asynchronous interface to operate at baudrate,8,n,1 */
@@ -213,6 +211,9 @@ void Asclin1_InitUart (void)
     src->B.CLRR = 1; /* clear request */
     MODULE_ASCLIN1.FLAGSENABLE.B.RFLE = 1; /* enable rx fifo fill level flag */
     src->B.SRE = 1; /* interrupt enable */
+
+    /* Init bluetooth rx queue */
+    bluetooth_rx_queue_init();
 }
 
 /* Send character CHR via the serial line */
@@ -239,6 +240,14 @@ unsigned char Asclin1_InUart (void)
         ;
 
     return ch;
+}
+
+char Asclin1_InUartNonBlock (void)
+{
+    unsigned char ch = 0;
+    int res = Asclin1_PollUart(&ch);
+
+    return res == 1 ? ch : -1;
 }
 
 /* Check the serial line if a character has been received.

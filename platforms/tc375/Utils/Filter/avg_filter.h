@@ -1,5 +1,5 @@
-#ifndef FILTER_AVG_FILTER_H_
-#define FILTER_AVG_FILTER_H_
+#ifndef UTILS_FILTER_AVG_FILTER_H_
+#define UTILS_FILTER_AVG_FILTER_H_
 
 #include <stdint.h>
 
@@ -22,4 +22,4 @@ float Filter_Update (AverageFilter *filter, float new_value);
 /* 필터 리셋 (내용 초기화) */
 void Filter_Reset (AverageFilter *filter);
 
-#endif /* FILTER_AVG_FILTER_H_ */
+#endif /* UTILS_FILTER_AVG_FILTER_H_ */

@@ -2,15 +2,15 @@
 
 void Module_Init (void)
 {
-    Gpt1_Init();
-    scueru_Init0();
-    scueru_Init1();
-    scueru_Init2();
-    Ultrasonic_Trigger_Init();
-    Can_Init(BD_500K, CAN_NODE0);
     Motor_Init();
-    Asclin1_InitUart();
+    ScuEru_Init0();
+    ScuEru_Init1();
+    ScuEru_Init2();
+    Ultrasonic_Init();
+    Gpt1_Init();
+    Can_Init(BD_500K, CAN_NODE0);
     Asclin0_InitUart(); // for debug
+    Asclin1_InitUart();
 }
 
 IFX_ALIGN(4) IfxCpu_syncEvent g_cpuSyncEvent = 0;
