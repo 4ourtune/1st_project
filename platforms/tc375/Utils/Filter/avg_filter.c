@@ -3,7 +3,7 @@
 int Filter_Init (AverageFilter *filter, int size)
 {
     if (size <= 0 || size > MAX_FILTER_SIZE)
-        return -1;
+        return 0;
 
     for (int i = 0; i < MAX_FILTER_SIZE; i++)
         filter->buf[i] = 0.0f;
@@ -12,7 +12,7 @@ int Filter_Init (AverageFilter *filter, int size)
     filter->next_index = 0;
     filter->data_cnt = 0;
 
-    return 0;
+    return 1;
 }
 
 float Filter_Update (AverageFilter *filter, float new_value)

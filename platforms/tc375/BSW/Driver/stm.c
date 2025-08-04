@@ -2,37 +2,36 @@
 
 uint64 getTime10ns (void)
 {
-    uint64 result;
-
     /* Read 64-bit System Timer */
-    result = MODULE_STM0.TIM0.U;
-    result |= ((uint64) MODULE_STM0.CAP.U) << 32;
+    uint32 upper1, lower, upper2;
 
+    __dsync();
+    do
+    {
+        upper1 = MODULE_STM0.TIM6.U;
+        lower = MODULE_STM0.TIM0.U;
+        upper2 = MODULE_STM0.TIM6.U;
+    }while (upper1 != upper2);
+    __isync();
+
+    uint64 result = (((uint64) upper1) << 32) | lower;
+
+    /* return 10nanoseconds */
     return result;
 }
 
 uint64 getTimeUs (void)
 {
-    uint64 result;
-    float32 frequency = 100000000.0f; // 100MHz -> 10^8Hz
-
-    /* Read 64-bit System Timer */
-    result = MODULE_STM0.TIM0.U;
-    result |= ((uint64) MODULE_STM0.CAP.U) << 32;
-
     /* return microseconds */
+    uint64 result = getTime10ns();
+    float32 frequency = 100000000.0f; // 100MHz -> 10^8Hz
     return result / (frequency / 1000000);
 }
 
 uint64 getTimeMs (void)
 {
-    uint64 result;
-    float32 frequency = 100000000.0f;
-
-    /* Read 64-bit System Timer */
-    result = MODULE_STM0.TIM0.U;
-    result |= ((uint64) MODULE_STM0.CAP.U) << 32;
-
     /* return milliseconds */
+    uint64 result = getTime10ns();
+    float32 frequency = 100000000.0f;
     return result / (frequency / 1000);
 }

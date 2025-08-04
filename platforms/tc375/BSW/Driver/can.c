@@ -24,7 +24,7 @@ IFX_INTERRUPT(Can_RxIsrHandler, 0, ISR_PRIORITY_CAN_RX);
 void Can_RxIsrHandler (void)
 {
     unsigned int rxID;
-    char rxData[8] = {0, };
+    unsigned char rxData[8] = {0, };
     int rxLen;
     Can_RecvMsg(&rxID, rxData, &rxLen);
 

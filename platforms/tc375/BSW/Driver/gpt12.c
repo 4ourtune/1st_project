@@ -7,26 +7,7 @@ static const int TIMER_T3_T2_VALUE = 3125; // Set timer T3, T2 value: 5^5 = 3125
 IFX_INTERRUPT(IsrGpt1T3Handler, 0, ISR_PRIORITY_GPT1T3_TIMER);
 void IsrGpt1T3Handler (void) // (2^3 * 5^3)Hz = 1000Hz = 0.001sec = 1ms
 {
-    static int aeb_cnt = 0;
-    static int ult_cnt = 0;
-
-    aeb_cnt = (aeb_cnt + 1) % 100; // 100ms
-    ult_cnt = (ult_cnt + 1) % 40; // 40ms
-
-    if (aeb_cnt == 1)
-    {
-        // AEB
-    }
-
-    if (Get_APS_State() == 1)
-    {
-
-        if (ult_cnt == 1 || ult_cnt == 2)
-        {
-            // Ultrasonic sensor: Set the period to 40ms. 38ms(Max echo back pulse duration) + 2ms(Margin including trigger pulse)
-            Toggle_Ultrasonic_Trigger();
-        }
-    }
+    Ultrasonic_Toggle_Trigger();
 }
 
 void Run_Gpt12_T3 ()

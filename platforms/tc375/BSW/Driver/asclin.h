@@ -5,7 +5,7 @@
 #include "IfxAsclin_bf.h"
 #include "IfxCpu_Irq.h"
 #include "isr_priority.h"
-#include "str_queue.h"
+#include "Bluetooth.h"
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -23,6 +23,7 @@ int Asclin0_PollUart (unsigned char *chr);
 void Asclin1_InitUart (void);
 void Asclin1_OutUart (const unsigned char chr);
 unsigned char Asclin1_InUart (void);
+char Asclin1_InUartNonBlock (void);
 int Asclin1_PollUart (unsigned char *chr);
 
 #endif /* BSW_DRIVER_ASCLIN_H_ */
