@@ -11,6 +11,9 @@
 #include "gpt12.h"
 #include "can.h"
 #include "asclin.h"
+#include "GPIO.h"
+#include "Emer_Light.h"
+#include "stm.h"
 
 void System_Init (void);
 

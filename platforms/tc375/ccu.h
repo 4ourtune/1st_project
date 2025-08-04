@@ -7,6 +7,7 @@
 
 #include "Bluetooth.h"
 #include "aeb.h"
+#include "emer_light.h"
 #include "aps.h"
 
 #include "motor_controller.h"
