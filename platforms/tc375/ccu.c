@@ -52,11 +52,14 @@ void run_ccu (void)
         if (AEB_GetState())
         {
             Set_APS_State(0); // APS off
-
+            Emer_Light_Blink();
             if (motor_y > MOTOR_STOP) // If it moves forward
             {
                 motor_x = motor_y = MOTOR_STOP;
             }
+        }
+        else {
+            Emer_Light_Off();
         }
 
         /* Check APS */
