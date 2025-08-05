@@ -5,9 +5,11 @@
 
 static volatile int aeb_state = AEB_STATE_NORMAL;
 
-bool AEB_IsEmergencyBrakingRequired(void)
+bool AEB_IsEmergencyBrakingRequired (void)
 {
-    unsigned int distance_mm = Tof_GetCorrectedDistance();
+    ToFData_t tof_front;
+    unsigned int distance_mm;
+    distance_mm = (unsigned int) (tof_front.distance_m * 1000);
 
     // 1순위: 10cm + 허용오차 이하면 무조건 긴급제동
     if (distance_mm <= AEB_EMERGENCY_THRESHOLD_MM + AEB_TOLERANCE_MM)
@@ -30,7 +32,7 @@ bool AEB_IsEmergencyBrakingRequired(void)
     // braking_distance = (AEB_SPEED_COEFF_A * speed² + AEB_SPEED_COEFF_B * speed + AEB_SPEED_COEFF_C) / AEB_SPEED_DIVIDER
     int speed_squared = vehicle_speed * vehicle_speed;
     int numerator = AEB_SPEED_COEFF_A * speed_squared + AEB_SPEED_COEFF_B * vehicle_speed + AEB_SPEED_COEFF_C;
-    unsigned int braking_distance_mm = (unsigned int)(numerator / AEB_SPEED_DIVIDER);
+    unsigned int braking_distance_mm = (unsigned int) (numerator / AEB_SPEED_DIVIDER);
 
     // 제동 조건: 제동 후 목표 정지거리(10cm)에 정확히 멈추도록
     // distance_mm = braking_distance_mm + AEB_EMERGENCY_THRESHOLD_MM 일 때 제동 시작
@@ -42,7 +44,7 @@ bool AEB_IsEmergencyBrakingRequired(void)
     return false;
 }
 
-int AEB_UpdateState(uint64 interval_us)
+int AEB_UpdateState (uint64 interval_us)
 {
     // interval_us보다 오래된 센서 값이 있으면 return false (업데이트 실패)
 
@@ -57,12 +59,12 @@ int AEB_UpdateState(uint64 interval_us)
     return true;
 }
 
-int AEB_GetState(void)
+int AEB_GetState (void)
 {
     return aeb_state;
 }
 
-void AEB_SetState(int state)
+void AEB_SetState (int state)
 {
     if (state == AEB_STATE_NORMAL || state == AEB_STATE_EMERGENCY)
     {

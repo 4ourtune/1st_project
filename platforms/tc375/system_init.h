@@ -9,7 +9,6 @@
 #include "eru.h"
 #include "Ultrasonic.h"
 #include "gpt12.h"
-#include "can.h"
 #include "asclin.h"
 #include "stm.h"
 #include "GPIO.h"
