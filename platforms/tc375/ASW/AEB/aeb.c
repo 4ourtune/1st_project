@@ -8,6 +8,8 @@ static volatile int aeb_state = AEB_STATE_NORMAL;
 bool AEB_IsEmergencyBrakingRequired (void)
 {
     ToFData_t tof_front;
+    ToF_GetLatestData(&tof_front);
+	
     unsigned int distance_mm;
     distance_mm = (unsigned int) (tof_front.distance_m * 1000);
 
