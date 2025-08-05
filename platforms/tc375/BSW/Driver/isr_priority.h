@@ -10,8 +10,8 @@
 #define ISR_PRIORITY_ASCLIN1_RX 4
 //#define ISR_PRIORITY_ASCLIN1_TX 5
 
-#define ISR_PRIORITY_CAN_RX 6 /* Define the CAN RX interrupt priority */
-#define ISR_PRIORITY_CAN_TX 7 /* Define the CAN TX interrupt priority */
+#define ISR_PRIORITY_CAN_RX 22 /* Define the CAN RX interrupt priority */
+#define ISR_PRIORITY_CAN_TX 23 /* Define the CAN TX interrupt priority */
 
 //#define ISR_PRIORITY_CANFD_RX 8 /* Define the CAN RX interrupt priority */
 //#define ISR_PRIORITY_CANFD_TX 9 /* Define the CAN TX interrupt priority */

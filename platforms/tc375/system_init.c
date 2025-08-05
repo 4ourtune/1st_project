@@ -3,7 +3,6 @@
 void Module_Init (void)
 {
     GPIO_Init();
-    Emer_Light_Init();
     Motor_Init();
     ScuEru_Init0();
     ScuEru_Init1();

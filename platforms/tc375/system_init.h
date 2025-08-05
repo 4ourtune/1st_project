@@ -1,8 +1,6 @@
 #ifndef SYSTEM_INIT_H_
 #define SYSTEM_INIT_H_
 
-#include <emer_light.h>
-#include <GPIO.h>
 #include "Ifx_Types.h"
 #include "IfxCpu.h"
 #include "IfxScuWdt.h"
@@ -14,6 +12,7 @@
 #include "can.h"
 #include "asclin.h"
 #include "stm.h"
+#include "GPIO.h"
 
 void System_Init (void);
 
