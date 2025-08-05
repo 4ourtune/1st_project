@@ -1,13 +1,13 @@
 #ifndef CCU_H_
 #define CCU_H_
 
+#include <emer_light.h>
 #include <stdlib.h>
 #include "my_stdio.h"
 #include "timed_executor.h"
 
 #include "Bluetooth.h"
 #include "aeb.h"
-#include "emer_light.h"
 #include "aps.h"
 
 #include "motor_controller.h"

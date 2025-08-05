@@ -1,8 +1,8 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
+#include <GPIO.h>
 #include "Ifx_reg.h"
-#include "GPIO.h"
 
 void GPIO_Init(void)
 {
@@ -46,48 +46,4 @@ void GPIO_ToggleLed(unsigned char num_LED)
             MODULE_P21.OUT.B.P0 ^= 1;
             break;
     }
-}
-
-int GPIO_getSW1(void)
-{
-    return MODULE_P02.IN.B.P0 ^ 1;
-}
-
-int GPIO_getSW2(void)
-{
-    return MODULE_P02.IN.B.P1 ^ 1;
-}
-
-int GPIO_getSW3(void)
-{
-    return MODULE_P00.IN.B.P7 ^ 1;
-}
-
-int GPIO_getSWxDebounce(int sw_num)
-{
-    volatile int sw_state, i = 0, cnt = 0;
-    volatile char buf[10] = {0, };
-
-    while (cnt < 10000) {
-        for (i = 0; i < 10; i++) {
-            switch (sw_num) {
-                case 1:
-                    buf[i] = (char)GPIO_getSW1();
-                    break;
-                case 2:
-                    buf[i] = (char)GPIO_getSW2();
-                    break;
-                case 3:
-                    buf[i] = (char)GPIO_getSW3();
-                    break;
-            }
-        }
-        for (i = 0; i < 10; i++) {
-            if (buf[0] != buf[i]) { cnt = 0; }
-        }
-        cnt += 1;
-    }
-    sw_state = buf[0];
-
-    return sw_state;
 }
