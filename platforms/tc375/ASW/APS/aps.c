@@ -5,7 +5,7 @@
 static ToFData_t tof_front;
 static UltrasonicData_t ult_data[3];
 
-static unsigned int sense_dist[SENSOR_DATA_COUNT]; // 0: ToF_front, 1: Ult_left, 2: Ult_right, 3: Ult_rear
+static int sense_dist[SENSOR_DATA_COUNT]; // 0: ToF_front, 1: Ult_left, 2: Ult_right, 3: Ult_rear
 static uint64 sense_time[SENSOR_DATA_COUNT];
 
 static volatile int aps_state = 0;
@@ -26,7 +26,7 @@ int Update_APS_Result (uint64 interval_us)
     Ultrasonic_GetLatestData(ULTRASONIC_RIGHT, &ult_data[1]); // Ult_right
     Ultrasonic_GetLatestData(ULTRASONIC_REAR, &ult_data[2]); // Ult_rear
 
-    sense_dist[0] = (unsigned int) (tof_front.distance_m * 1000);
+    sense_dist[0] = (int) (tof_front.distance_m * 1000);
     sense_time[0] = tof_front.stm0_time_us;
     for (int i = 0; i < ULTRASONIC_COUNT; i++)
     {

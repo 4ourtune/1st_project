@@ -42,10 +42,12 @@ static bool parseToFPacket (const uint8_t *packet, ToFData_t *out)
 
 void ToF_RxHandler (uint8_t ch)
 {
+    static uint64_t start_time;
     if (!syncing)
     {
         if (ch == TOF_FRAME_HEADER)
         {
+            start_time = getTimeUs();
             rx_index = 0;
             rx_buffer[rx_index++] = ch;
             syncing = true;
@@ -59,7 +61,7 @@ void ToF_RxHandler (uint8_t ch)
             syncing = false;
             if (parseToFPacket(rx_buffer, &latest_data))
             {
-                latest_data.stm0_time_us = getTimeUs();
+                latest_data.stm0_time_us = start_time;
                 data_ready = true;
             }
             rx_index = 0;

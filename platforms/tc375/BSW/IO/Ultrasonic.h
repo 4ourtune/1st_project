@@ -13,7 +13,7 @@ typedef enum
 
 typedef struct
 {
-    unsigned int distance_mm;
+    int distance_mm;
     uint64_t timestamp_us;
 } UltrasonicData_t;
 

@@ -3,23 +3,24 @@
 
 #include <stdint.h>
 
-#define MAX_FILTER_SIZE 20  // 버퍼 최대 크기
+#define MAX_FILTER_SIZE 20
 
 typedef struct
 {
-    float buf[MAX_FILTER_SIZE];  // 고정된 버퍼
-    int filter_size;             // 실제 사용할 필터 크기
-    int next_index;              // 다음 인덱스
-    int data_cnt;                // 현재 유효 데이터 수
+    int32_t buf[MAX_FILTER_SIZE];  // 고정된 정수 버퍼
+    int filter_size;               // 사용 중인 필터 크기
+    int next_index;                // 다음 인덱스
+    int data_cnt;                  // 유효 데이터 수
+    int64_t sum;                   // 누적합 (오버플로우 방지용)
 } AverageFilter;
 
-/* 필터 초기화 - 사용할 필터 크기 설정 */
+/* 필터 초기화 (size: 1~MAX_FILTER_SIZE) */
 int Filter_Init (AverageFilter *filter, int size);
 
-/* 새로운 값을 추가하고 필터링된 평균값 반환 */
-float Filter_Update (AverageFilter *filter, float new_value);
+/* 새 값을 추가하고 정수 평균 반환 */
+int32_t Filter_Update (AverageFilter *filter, int32_t new_value);
 
-/* 필터 리셋 (내용 초기화) */
-void Filter_Reset (AverageFilter *filter);
+/* 필터 리셋 */
+int Filter_Reset (AverageFilter *filter);
 
 #endif /* UTILS_FILTER_AVG_FILTER_H_ */
