@@ -35,3 +35,17 @@ void GPIO_ToggleLed (unsigned char num_LED)
             break;
     }
 }
+
+// LED 상태를 반환하는 함수 (1: ON, 0: OFF)
+int GPIO_GetLedState(unsigned char num_LED)
+{
+    switch (num_LED)
+    {
+        case 1:
+            return MODULE_P21.OUT.B.P4 ? 1 : 0;
+        case 2:
+            return MODULE_P21.OUT.B.P0 ? 1 : 0;
+        default:
+            return -1; // 잘못된 번호
+    }
+}

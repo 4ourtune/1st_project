@@ -7,6 +7,7 @@
 // #include "ToF.h"
 #include "eru.h"
 #include "stm.h"
+#include "emer_light.h"
 
 
 #define CYCLE_DELAY_US                100000    // 100ms
