@@ -2,42 +2,51 @@
 
 int Filter_Init (AverageFilter *filter, int size)
 {
-    if (size <= 0 || size > MAX_FILTER_SIZE)
+    if (!filter || size <= 0 || size > MAX_FILTER_SIZE)
         return 0;
 
-    for (int i = 0; i < MAX_FILTER_SIZE; i++)
-        filter->buf[i] = 0.0f;
+    for (int i = 0; i < size; i++)
+        filter->buf[i] = 0;
 
     filter->filter_size = size;
     filter->next_index = 0;
     filter->data_cnt = 0;
+    filter->sum = 0;
 
     return 1;
 }
 
-float Filter_Update (AverageFilter *filter, float new_value)
+int32_t Filter_Update (AverageFilter *filter, int32_t new_value)
 {
-    if (filter->filter_size <= 0 || filter->filter_size > MAX_FILTER_SIZE)
-        return 0.0f;
+    if (!filter || filter->filter_size <= 0 || filter->filter_size > MAX_FILTER_SIZE)
+        return 0;
 
-    filter->buf[filter->next_index] = new_value;
-    filter->next_index = (filter->next_index + 1) % filter->filter_size;
+    int idx = filter->next_index;
+    int32_t old_value = filter->buf[idx];
 
     if (filter->data_cnt < filter->filter_size)
         filter->data_cnt++;
+    else
+        filter->sum -= old_value;
 
-    float sum = 0.0f;
-    for (int i = 0; i < filter->data_cnt; i++)
-        sum += filter->buf[i];
+    filter->buf[idx] = new_value;
+    filter->sum += new_value;
+    filter->next_index = (idx + 1) % filter->filter_size;
 
-    return sum / filter->data_cnt;
+    return (int32_t) (filter->sum / filter->data_cnt);
 }
 
-void Filter_Reset (AverageFilter *filter)
+int Filter_Reset (AverageFilter *filter)
 {
-    for (int i = 0; i < MAX_FILTER_SIZE; i++)
-        filter->buf[i] = 0.0f;
+    if (!filter)
+        return 0;
+
+    for (int i = 0; i < filter->filter_size; i++)
+        filter->buf[i] = 0;
 
     filter->next_index = 0;
     filter->data_cnt = 0;
+    filter->sum = 0;
+
+    return 1;
 }

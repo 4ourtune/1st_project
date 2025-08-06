@@ -4,21 +4,21 @@ IFX_INTERRUPT(SCUERU_Int0_Handler, 0, ISR_PRIORITY_SCUERU0);
 void SCUERU_Int0_Handler (void)
 {
     int input_pin_state = MODULE_P15.IN.B.P4;
-    Ultrasonic_Left_Handler(input_pin_state);
+    Ultrasonic_EchoHandler(ULTRASONIC_LEFT, input_pin_state);
 }
 
 IFX_INTERRUPT(SCUERU_Int1_Handler, 0, ISR_PRIORITY_SCUERU1);
 void SCUERU_Int1_Handler (void)
 {
     int input_pin_state = MODULE_P15.IN.B.P5;
-    Ultrasonic_Right_Handler(input_pin_state);
+    Ultrasonic_EchoHandler(ULTRASONIC_RIGHT, input_pin_state);
 }
 
 IFX_INTERRUPT(SCUERU_Int2_Handler, 0, ISR_PRIORITY_SCUERU2);
 void SCUERU_Int2_Handler (void)
 {
     int input_pin_state = MODULE_P02.IN.B.P0;
-    Ultrasonic_Rear_Handler(input_pin_state);
+    Ultrasonic_EchoHandler(ULTRASONIC_REAR, input_pin_state);
 }
 
 void ScuEru_Init0 (void)

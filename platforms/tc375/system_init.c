@@ -3,16 +3,15 @@
 void Module_Init (void)
 {
     GPIO_Init();
-    Emer_Light_Init();
     Motor_Init();
     ScuEru_Init0();
     ScuEru_Init1();
     ScuEru_Init2();
     Ultrasonic_Init();
     Gpt1_Init();
-    Can_Init(BD_500K, CAN_NODE0);
     Asclin0_InitUart(); // for debug
     Asclin1_InitUart();
+    Asclin2_InitUart(); // For ToF
 }
 
 IFX_ALIGN(4) IfxCpu_syncEvent g_cpuSyncEvent = 0;

@@ -10,7 +10,10 @@
 #define APS_VEHICLE_SPEED_CM_PER_MS 0.5f
 #define APS_MAX_SPACE_SIZE_CM 1000
 
-static unsigned int sense_dist[SENSOR_DATA_COUNT];
+
+static ToFData_t tof_front;
+static UltrasonicData_t ult_data[3];
+static int sense_dist[SENSOR_DATA_COUNT]; // 0: ToF_front, 1: Ult_left, 2: Ult_right, 3: Ult_rear
 static uint64 sense_time[SENSOR_DATA_COUNT];
 
 static volatile int aps_state = 0;
@@ -142,14 +145,18 @@ static bool APS_DetectParkingSpace(void)
  */
 int Update_APS_Result (uint64 interval_us)
 {
-    // unsigned short tof_signal;
-    // unsigned char tof_status;
-    // Tof_GetDistance(sense_dist + 0, &tof_signal, &tof_status, sense_time + 0); // ToF_front
-    Ultrasonic_Get_Left_Data(sense_dist + 1, sense_time + 1); // Ult_left
-    Ultrasonic_Get_Right_Data(sense_dist + 2, sense_time + 2); // Ult_right
-    Ultrasonic_Get_Rear_Data(sense_dist + 3, sense_time + 3); // Ult_rear
-    // my_printf("[APS] Sensor: F=%u L=%u R=%u B=%u\n", sense_dist[0], sense_dist[1], sense_dist[2], sense_dist[3]);
-    // my_printf("[APS] Sensor: L=%u R=%u B=%u\n", sense_dist[1], sense_dist[2], sense_dist[3]);
+    ToF_GetLatestData(&tof_front); // ToF_front
+    Ultrasonic_GetLatestData(ULTRASONIC_LEFT, &ult_data[0]); // Ult_left
+    Ultrasonic_GetLatestData(ULTRASONIC_RIGHT, &ult_data[1]); // Ult_right
+    Ultrasonic_GetLatestData(ULTRASONIC_REAR, &ult_data[2]); // Ult_rear
+
+    sense_dist[0] = (int) (tof_front.distance_m * 1000);
+    sense_time[0] = tof_front.stm0_time_us;
+    for (int i = 0; i < ULTRASONIC_COUNT; i++)
+    {
+        sense_dist[i + 1] = ult_data[i].distance_mm;
+        sense_time[i + 1] = ult_data[i].timestamp_us;
+    }
 
     uint64 cur_time = getTimeUs();
 

@@ -58,7 +58,8 @@ void run_ccu (void)
                 motor_x = motor_y = MOTOR_STOP;
             }
         }
-        else {
+        else
+        {
             Emer_Light_Off();
         }
 
