@@ -11,6 +11,7 @@
 
 #include "aeb.h"
 #include "aps.h"
+#include "Buzzer.h"
 
 void run_ccu (void);
 

@@ -12,6 +12,7 @@
 #include "asclin.h"
 #include "stm.h"
 #include "GPIO.h"
+#include "Buzzer.h"
 
 void System_Init (void);
 

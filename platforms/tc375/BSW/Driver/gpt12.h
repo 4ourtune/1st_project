@@ -10,5 +10,8 @@
 #include "Ultrasonic.h"
 
 void Gpt1_Init (void);
+void Gpt2_init(void);
+void runGpt12_T6(void);
+void stopGpt12_T6(void);
 
 #endif /* BSW_DRIVER_GPT12_H_ */

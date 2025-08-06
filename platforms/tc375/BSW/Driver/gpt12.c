@@ -4,6 +4,10 @@ static const int GPT1_BLOCK_PRESCALER = 0x2; // Set GPT1 block prescaler: 2^5 = 
 static const int TIMER_T3_INPUT_PRESCALER = 0x0; // Set T3 input prescaler: 2^0 = 0
 static const int TIMER_T3_T2_VALUE = 3125; // Set timer T3, T2 value: 5^5 = 3125
 
+
+static volatile unsigned int cntDelay = 0;
+
+
 IFX_INTERRUPT(IsrGpt1T3Handler, 0, ISR_PRIORITY_GPT1T3_TIMER);
 void IsrGpt1T3Handler (void) // (2^3 * 5^3)Hz = 1000Hz = 0.001sec = 1ms
 {
@@ -48,4 +52,52 @@ void Gpt1_Init (void)
     src->B.SRE = 1; /* interrupt enable */
 
     Run_Gpt12_T3();
+}
+
+
+
+void Gpt2_init(void)
+{
+    /* Initialize the Timer T6 for delay_us */
+    MODULE_GPT120.T6CON.B.BPS2 = 0x0; /* Set GPT2 block prescaler: 4 */
+    MODULE_GPT120.T6CON.B.T6M = 0x0; /* Set T6 to timer mode */
+    MODULE_GPT120.T6CON.B.T6UD = 0x1; /* Set T6 count direction(down) */
+    MODULE_GPT120.T6CON.B.T6I = 0x0; /* Set T6 input prescaler(2^0=1) */
+    MODULE_GPT120.T6CON.B.T6OE = 0x1; /* Overflow/Underflow Output Enable */
+    MODULE_GPT120.T6CON.B.T6SR = 0x1; /* Reload from register CAPREL Enabled */
+    MODULE_GPT120.T6.U = 25u; /* Set T6 start value (1us) */
+
+    MODULE_GPT120.CAPREL.U = 25u; /* Set CAPREL reload value */                                          /* Set CAPREL reload value */
+
+    /* Initialize the interrupt */
+    volatile Ifx_SRC_SRCR *src;
+    src = (volatile Ifx_SRC_SRCR*) (&MODULE_SRC.GPT12.GPT12[0].T6);
+    src->B.SRPN = ISR_PRIORITY_GPT2T6_TIMER;
+    src->B.TOS = 0;
+    src->B.CLRR = 1; /* clear request */
+    src->B.SRE = 1; /* interrupt enable */
+
+
+}
+
+
+IFX_INTERRUPT(IsrGpt2T6Handler, 0, ISR_PRIORITY_GPT2T6_TIMER);
+void IsrGpt2T6Handler(void)
+{
+    cntDelay++;
+    if (cntDelay %500 == 0){
+        MODULE_P23.OUT.B.P1 ^= 1;
+    }
+}
+
+
+
+void runGpt12_T6()
+{
+    IfxGpt12_T6_run(&MODULE_GPT120, IfxGpt12_TimerRun_start);
+}
+
+void stopGpt12_T6()
+{
+    IfxGpt12_T6_run(&MODULE_GPT120, IfxGpt12_TimerRun_stop);
 }

@@ -9,9 +9,11 @@ void Module_Init (void)
     ScuEru_Init2();
     Ultrasonic_Init();
     Gpt1_Init();
+    Gpt2_init();
     Asclin0_InitUart(); // for debug
     Asclin1_InitUart();
     Asclin2_InitUart(); // For ToF
+    Buzzer_Init();
 }
 
 IFX_ALIGN(4) IfxCpu_syncEvent g_cpuSyncEvent = 0;
