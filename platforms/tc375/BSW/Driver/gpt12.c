@@ -69,6 +69,10 @@ void Stop_Gpt12_T6 (void)
 
 void Gpt2_Init (void)
 {
+    IfxScuWdt_clearCpuEndinit(IfxScuWdt_getGlobalEndinitPassword());
+    MODULE_GPT120.CLC.U = 0;
+    IfxScuWdt_setCpuEndinit(IfxScuWdt_getGlobalEndinitPassword());
+
     /* Initialize the Timer T6 for delay_us */
     MODULE_GPT120.T6CON.B.BPS2 = 0x0; /* Set GPT2 block prescaler: 4 */
     MODULE_GPT120.T6CON.B.T6M = 0x0; /* Set T6 to timer mode */
