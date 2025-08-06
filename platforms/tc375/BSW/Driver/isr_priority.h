@@ -13,11 +13,13 @@
 #define ISR_PRIORITY_ASCLIN2_RX 5
 //#define ISR_PRIORITY_ASCLIN2_TX 6
 
-#define ISR_PRIORITY_GPT1T3_TIMER 7 /* Define the GPT1 Timer interrupt priority */
+//#define ISR_PRIORITY_GPT1T3_TIMER 7 /* Define the GPT1 Timer interrupt priority */
 #define ISR_PRIORITY_GPT2T6_TIMER 8 /* Define the GPT2 Timer interrupt priority */
 
-#define ISR_PRIORITY_SCUERU0 9
-#define ISR_PRIORITY_SCUERU1 10
-#define ISR_PRIORITY_SCUERU2 11
+#define ISR_PRIORITY_STM0 9
+
+#define ISR_PRIORITY_SCUERU0 11
+#define ISR_PRIORITY_SCUERU1 12
+#define ISR_PRIORITY_SCUERU2 13
 
 #endif /* BSW_DRIVER_ISR_PRIORITY_H_ */

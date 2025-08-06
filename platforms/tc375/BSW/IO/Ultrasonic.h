@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-
 #include "ult_event_queue.h"
 #include "avg_filter.h"
+
 #include "stm.h"
 
 #define ULT_FILTER_WINDOW_SIZE 5
@@ -23,7 +23,6 @@ typedef struct
 } UltrasonicData_t;
 
 void Ultrasonic_Init (void);
-void Ultrasonic_ToggleTrigger (void);
 void Ultrasonic_EchoHandler (UltrasonicSide side, int input_pin_state);
 void Ultrasonic_ProcessQueue (void);
 bool Ultrasonic_GetLatestData (UltrasonicSide side, UltrasonicData_t *out);

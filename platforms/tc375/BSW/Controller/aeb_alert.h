@@ -1,6 +1,8 @@
 #ifndef BSW_CONTROLLER_AEB_ALERT_H_
 #define BSW_CONTROLLER_AEB_ALERT_H_
 
+#include "stm.h"
+
 #include "LED.h"
 #include "Buzzer.h"
 

@@ -35,3 +35,36 @@ uint64 getTimeMs (void)
     float32 frequency = 100000000.0f;
     return result / (frequency / 1000);
 }
+
+/* Ultrasonic sensor: Set the period to 40ms. 38ms(Max echo back pulse duration) + 2ms(Margin including trigger pulse) */
+#define ULTRASONIC_TRIG_LOW_DURATION 39000 // 39ms
+#define ULTRASONIC_TRIG_HIGH_DURATION 1000 // 1ms
+
+IFX_INTERRUPT(Stm0IsrHandler, 0, ISR_PRIORITY_STM0);
+void Stm0IsrHandler (void)
+{
+    static int ult_duration = ULTRASONIC_TRIG_LOW_DURATION;
+    ult_duration = (ULTRASONIC_TRIG_LOW_DURATION + ULTRASONIC_TRIG_HIGH_DURATION) - ult_duration;
+
+    GPIO_SetUltTrig(ult_duration == ULTRASONIC_TRIG_HIGH_DURATION);
+
+    MODULE_STM0.CMP[0].U = (unsigned int) (getTimeUs() + ult_duration) * 100;
+}
+
+void Stm0_Init (void)
+{
+    MODULE_STM0.CMCON.B.MSIZE0 = 31; /* Compare 32 bit size */
+    MODULE_STM0.CMCON.B.MSTART0 = 0; /* Compare start at 0 bit */
+    MODULE_STM0.ICR.B.CMP0OS = 0; /* Interrupt Output 0 */
+
+    MODULE_SRC.STM.STM[0].SR[0].B.TOS = 0; /* CPU 0 */
+    MODULE_SRC.STM.STM[0].SR[0].B.SRPN = ISR_PRIORITY_STM0;
+    MODULE_SRC.STM.STM[0].SR[0].B.CLRR = 1; /* Clear Interrupt Req. */
+    MODULE_SRC.STM.STM[0].SR[0].B.SRE = 1; /* Enable Interrupt */
+
+    MODULE_STM0.ISCR.B.CMP0IRR = 1U; /* Clear Interrupt Req. */
+    MODULE_STM0.ICR.B.CMP0EN = 1U; /* Enable Interrupt */
+
+    /* Set Compare register to current time + 1ms */
+    MODULE_STM0.CMP[0].U = (unsigned int) (getTimeUs() + ULTRASONIC_TRIG_LOW_DURATION) * 100;
+}

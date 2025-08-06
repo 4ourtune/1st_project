@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-
 #include "byte_queue.h"
+
 #include "stm.h"
 
 #define TOF_FRAME_LENGTH 16

@@ -7,24 +7,11 @@ static bool data_ready[ULTRASONIC_COUNT] = {false};
 
 void Ultrasonic_Init (void)
 {
-    MODULE_P10.IOCR4.B.PC4 = 0x10; /* Set P10.4 as output */
-    MODULE_P10.OUT.B.P4 = 0;
-
     for (int i = 0; i < ULTRASONIC_COUNT; ++i)
     {
         Filter_Init(&filters[i], ULT_FILTER_WINDOW_SIZE);
         UltEventQueue_Init(&rx_queues[i], ULTRASONIC_QUEUE_SIZE);
     }
-}
-
-void Ultrasonic_ToggleTrigger (void)
-{
-    static int cnt = 0;
-    /* Ultrasonic sensor: Set the period to 40ms. 38ms(Max echo back pulse duration) + 2ms(Margin including trigger pulse) */
-    cnt = (cnt + 1) % 40;
-
-    if (cnt == 1 || cnt == 2)
-        MODULE_P10.OUT.B.P4 = !MODULE_P10.OUT.B.P4;
 }
 
 void Ultrasonic_EchoHandler (UltrasonicSide side, int input_pin_state)

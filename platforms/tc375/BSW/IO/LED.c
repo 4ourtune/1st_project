@@ -2,8 +2,7 @@
 
 void LED_Init (void)
 {
-    GPIO_SetLed(1, 0);
-    GPIO_SetLed(2, 0);
+    LED_Off();
 }
 
 void LED_Toggle (void)

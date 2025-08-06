@@ -1,7 +1,7 @@
 #ifndef BSW_IO_BUZZER_H_
 #define BSW_IO_BUZZER_H_
 
-#include "Ifx_reg.h"
+#include "GPIO.h"
 #include "gpt12.h"
 
 void Buzzer_Init (void);

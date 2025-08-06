@@ -7,12 +7,12 @@
 #include <IfxPort.h>
 
 #include "isr_priority.h"
-#include "Ultrasonic.h"
+
 #include "Buzzer.h"
 
-void Gpt1_Init (void);
-void Run_Gpt12_T3 (void);
-void Stop_Gpt12_T3 (void);
+//void Gpt1_Init (void);
+//void Run_Gpt12_T3 (void);
+//void Stop_Gpt12_T3 (void);
 
 void Gpt2_Init (void);
 void Run_Gpt12_T6 (void);
