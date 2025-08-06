@@ -19,9 +19,9 @@
 //#define ISR_PRIORITY_CANFD_RX 8 /* Define the CAN RX interrupt priority */
 //#define ISR_PRIORITY_CANFD_TX 9 /* Define the CAN TX interrupt priority */
 
-#define ISR_PRIORITY_SCUERU0 1
-#define ISR_PRIORITY_SCUERU1 2
-#define ISR_PRIORITY_SCUERU2 3
+#define ISR_PRIORITY_SCUERU0 50
+#define ISR_PRIORITY_SCUERU1 51
+#define ISR_PRIORITY_SCUERU2 52
 
 #define ISR_PRIORITY_GPT1T3_TIMER 8 /* Define the GPT12 Timer interrupt priority  */
 
