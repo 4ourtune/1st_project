@@ -12,8 +12,8 @@
 #define CYCLE_DELAY_US                100000    // 100ms
 #define SENSOR_DATA_COUNT             4
 #define APS_WALL_THRESHOLD_CM         30
-#define MIN_PARKING_SPACE_CM          50
-#define APS_REAR_SAFETY_DISTANCE_CM   5
+//#define MIN_PARKING_SPACE_CM          50
+//#define APS_REAR_SAFETY_DISTANCE_CM   5
 #define APS_VEHICLE_SPEED_CM_PER_MS   0.5f
 #define APS_MAX_SPACE_SIZE_CM         1000
 
@@ -50,7 +50,7 @@ float APS_CalculateSpaceSize(uint64_t start_time, uint64_t end_time);
 
 // // APS 명령 및 상태 관리 함수
 void Calc_APS_Result(void);
-int Update_APS_Result(uint64_t interval_us);
+int Update_APS_Result (ToFData_t *tof_latest_data, UltrasonicData_t ult_latest_data[], uint64 interval_us);
 // int APS_CalculateSteeringFromSensor(int sensor_distance);
 
 // APS 외부 인터페이스

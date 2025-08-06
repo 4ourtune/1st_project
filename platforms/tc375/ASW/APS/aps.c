@@ -2,7 +2,6 @@
 #include "my_stdio.h"
 #include <stdbool.h> // bool 타입 사용
 
-#define CYCLE_DELAY_US 100000 // 100000us = 100ms
 #define SENSOR_DATA_COUNT 4
 #define APS_WALL_THRESHOLD_CM 30
 #define MIN_PARKING_SPACE_CM 200 // 20cm
@@ -10,9 +9,6 @@
 #define APS_VEHICLE_SPEED_CM_PER_MS 0.5f
 #define APS_MAX_SPACE_SIZE_CM 1000
 
-
-static ToFData_t tof_front;
-static UltrasonicData_t ult_data[3];
 static int sense_dist[SENSOR_DATA_COUNT]; // 0: ToF_front, 1: Ult_left, 2: Ult_right, 3: Ult_rear
 static uint64 sense_time[SENSOR_DATA_COUNT];
 
@@ -143,19 +139,14 @@ static bool APS_DetectParkingSpace(void)
 /**
  * @brief 센서 데이터를 갱신하고, APS 명령을 계산하는 함수
  */
-int Update_APS_Result (uint64 interval_us)
+int Update_APS_Result (ToFData_t *tof_latest_data, UltrasonicData_t ult_latest_data[], uint64 interval_us)
 {
-    ToF_GetLatestData(&tof_front); // ToF_front
-    Ultrasonic_GetLatestData(ULTRASONIC_LEFT, &ult_data[0]); // Ult_left
-    Ultrasonic_GetLatestData(ULTRASONIC_RIGHT, &ult_data[1]); // Ult_right
-    Ultrasonic_GetLatestData(ULTRASONIC_REAR, &ult_data[2]); // Ult_rear
-
-    sense_dist[0] = (int) (tof_front.distance_m * 1000);
-    sense_time[0] = tof_front.stm0_time_us;
+    sense_dist[0] = (int) (tof_latest_data->distance_m * 1000);
+    sense_time[0] = tof_latest_data->received_time_us;
     for (int i = 0; i < ULTRASONIC_COUNT; i++)
     {
-        sense_dist[i + 1] = ult_data[i].distance_mm;
-        sense_time[i + 1] = ult_data[i].timestamp_us;
+        sense_dist[i + 1] = ult_latest_data[i].distance_mm;
+        sense_time[i + 1] = ult_latest_data[i].received_time_us;
     }
 
     uint64 cur_time = getTimeUs();
@@ -185,7 +176,7 @@ static int APS_Test_MapJoystickValue (int value)
  */
 void Calc_APS_Result (void)
 {
-    int left_distance = sense_dist[1]; // 근데 어차피 안쓰고있음
+//    int left_distance = sense_dist[1]; // 근데 어차피 안쓰고있음
     int rear_distance = sense_dist[3];
 
     switch (current_phase) {
