@@ -24,5 +24,6 @@
 #define ISR_PRIORITY_SCUERU2 3
 
 #define ISR_PRIORITY_GPT1T3_TIMER 8 /* Define the GPT12 Timer interrupt priority  */
-
+#define ISR_PRIORITY_GPT2T6_TIMER 9/* Define the GPT12 Timer interrupt priority  */
+//
 #endif /* BSW_DRIVER_ISR_PRIORITY_H_ */

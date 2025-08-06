@@ -61,6 +61,7 @@ void run_ccu (void)
         else
         {
             Emer_Light_Off();
+            Buzzer_off();
         }
 
         /* Check APS */
