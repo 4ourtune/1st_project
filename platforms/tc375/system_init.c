@@ -9,6 +9,7 @@ void Module_Init (void)
     ScuEru_Init1(); // For ultrasonic
     ScuEru_Init2(); // For ultrasonic
     GPIO_Init(); // For buzzer, led, ultrasonic
+    Gpt1_Init(); // For ultrasonic
     Gpt2_Init(); // For buzzer
     Stm0_Init(); // For ultrasonic
 
