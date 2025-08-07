@@ -1,17 +1,13 @@
 #include "aeb.h"
-#include "ToF.h"
 #include "motor_controller.h"
 #include "my_stdio.h"
 
 static volatile int aeb_state = AEB_STATE_NORMAL;
 
-bool AEB_IsEmergencyBrakingRequired (void)
+static bool AEB_IsEmergencyBrakingRequired (const ToFData_t *tof_latest_data)
 {
-    ToFData_t tof_front;
-    ToF_GetLatestData(&tof_front);
-
     int distance_mm;
-    distance_mm = (int) (tof_front.distance_m * 1000);
+    distance_mm = (int) (tof_latest_data->distance_m * 1000);
 
     // 1순위: 10cm + 허용오차 이하면 무조건 긴급제동
     if (distance_mm <= AEB_EMERGENCY_THRESHOLD_MM + AEB_TOLERANCE_MM)
@@ -46,11 +42,11 @@ bool AEB_IsEmergencyBrakingRequired (void)
     return false;
 }
 
-int AEB_UpdateState (uint64 interval_us)
+int AEB_UpdateState (const ToFData_t *tof_latest_data, uint64 interval_us)
 {
     // interval_us보다 오래된 센서 값이 있으면 return false (업데이트 실패)
 
-    if (AEB_IsEmergencyBrakingRequired())
+    if (AEB_IsEmergencyBrakingRequired(tof_latest_data))
     {
         aeb_state = AEB_STATE_EMERGENCY;
     }

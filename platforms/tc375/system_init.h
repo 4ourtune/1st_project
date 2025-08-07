@@ -5,13 +5,15 @@
 #include "IfxCpu.h"
 #include "IfxScuWdt.h"
 
-#include "Motor.h"
-#include "eru.h"
-#include "Ultrasonic.h"
-#include "gpt12.h"
 #include "asclin.h"
-#include "stm.h"
+#include "eru.h"
 #include "GPIO.h"
+#include "gpt12.h"
+#include "stm.h"
+
+#include "Buzzer.h"
+#include "LED.h"
+#include "Motor.h"
 
 void System_Init (void);
 

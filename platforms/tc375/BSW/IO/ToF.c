@@ -1,12 +1,27 @@
 #include "ToF.h"
 
-// UART 수신 상태 관리용
-static uint8_t rx_buffer[TOF_FRAME_LENGTH];
-static uint8_t rx_index = 0;
-static bool syncing = false;
+static ByteQueue rx_queue;
+static uint64 sync_start_time_us[TOF_BUFFER_SIZE];
 
 static ToFData_t latest_data;
 static bool data_ready = false;
+
+void ToF_Init (void)
+{
+    ByteQueue_Init(&rx_queue, TOF_BUFFER_SIZE);
+}
+
+void ToF_RxHandler (uint8_t byte)
+{
+    int tail = rx_queue.tail;
+
+    ByteQueue_Push(&rx_queue, byte);
+
+    if (byte == TOF_FRAME_HEADER)
+    {
+        sync_start_time_us[tail] = getTimeUs();
+    }
+}
 
 static bool verifyCheckSum (const uint8_t *data, int32_t length)
 {
@@ -40,31 +55,42 @@ static bool parseToFPacket (const uint8_t *packet, ToFData_t *out)
     return true;
 }
 
-void ToF_RxHandler (uint8_t ch)
+void ToF_ProcessQueue (void)
 {
-    static uint64_t start_time;
-    if (!syncing)
+    static uint8_t packet[TOF_FRAME_LENGTH];
+    static uint8_t index = 0;
+    static bool syncing = false;
+
+    static uint64 frame_start_time_us = 0;
+
+    uint8_t byte;
+    while (ByteQueue_Pop(&rx_queue, &byte))
     {
-        if (ch == TOF_FRAME_HEADER)
+        int head = (rx_queue.head - 1 + TOF_BUFFER_SIZE) % TOF_BUFFER_SIZE;
+
+        if (!syncing)
         {
-            start_time = getTimeUs();
-            rx_index = 0;
-            rx_buffer[rx_index++] = ch;
-            syncing = true;
-        }
-    }
-    else
-    {
-        rx_buffer[rx_index++] = ch;
-        if (rx_index >= TOF_FRAME_LENGTH)
-        {
-            syncing = false;
-            if (parseToFPacket(rx_buffer, &latest_data))
+            if (byte == TOF_FRAME_HEADER)
             {
-                latest_data.stm0_time_us = start_time;
-                data_ready = true;
+                index = 0;
+                packet[index++] = byte;
+                frame_start_time_us = sync_start_time_us[head];
+                syncing = true;
             }
-            rx_index = 0;
+        }
+        else
+        {
+            packet[index++] = byte;
+            if (index >= TOF_FRAME_LENGTH)
+            {
+                syncing = false;
+                index = 0;
+                if (parseToFPacket(packet, &latest_data))
+                {
+                    latest_data.received_time_us = frame_start_time_us;
+                    data_ready = true;
+                }
+            }
         }
     }
 }
@@ -73,7 +99,8 @@ bool ToF_GetLatestData (ToFData_t *out)
 {
     if (!data_ready)
         return false;
+
     *out = latest_data;
-//    data_ready = false; // 읽으면 비움 (필요시 주석 처리)
+    data_ready = false; // 읽으면 비움 (필요시 주석 처리)
     return true;
 }
