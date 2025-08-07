@@ -27,6 +27,19 @@ void GPIO_ToggleBuzzer (void)
     MODULE_P23.OUT.B.P1 ^= 1;
 }
 
+int GPIO_GetLed (unsigned char num_LED)
+{
+    switch (num_LED)
+    {
+        case 1 :
+            return MODULE_P21.OUT.B.P4 ? 1 : 0;
+        case 2 :
+            return MODULE_P21.OUT.B.P0 ? 1 : 0;
+        default :
+            return -1; // 잘못된 번호
+    }
+}
+
 void GPIO_SetLed (unsigned char num_LED, unsigned char onOff)
 {
     switch (num_LED)

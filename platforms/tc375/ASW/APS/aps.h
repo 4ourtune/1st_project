@@ -12,8 +12,8 @@
 #define CYCLE_DELAY_US                100000    // 100ms
 #define SENSOR_DATA_COUNT             4
 #define APS_WALL_THRESHOLD_CM         30
-//#define MIN_PARKING_SPACE_CM          50
-//#define APS_REAR_SAFETY_DISTANCE_CM   5
+#define MIN_PARKING_SPACE_CM          50
+#define APS_REAR_SAFETY_DISTANCE_CM   5
 #define APS_VEHICLE_SPEED_CM_PER_MS   0.5f
 #define APS_MAX_SPACE_SIZE_CM         1000
 

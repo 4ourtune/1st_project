@@ -54,13 +54,16 @@ void run_ccu (void)
         /* Get ToF data */
         ToF_ProcessQueue();
         ToF_GetLatestData(&tof_latest_data);
+//        my_printf("0/%lf ", tof_latest_data.distance_m);
 
         /* Get ultrasonic data */
         Ultrasonic_ProcessQueue();
         for (int i = 0; i < ULTRASONIC_COUNT; i++)
         {
             Ultrasonic_GetLatestData(i, &ult_latest_data[i]);
+//            my_printf("%d/%d ", ult_latest_data[i].distance_mm);
         }
+//        my_printf("\n");
 
         /* Check AEB */
         /* Command priority: 3 */
@@ -71,7 +74,7 @@ void run_ccu (void)
             aeb_last_updated_time = cur_time;
         }
 
-        if (AEB_GetState())
+        if (AEB_GetState() && !Get_APS_State())
         {
             Set_APS_State(0); // APS off
             AEBAlert_On();
