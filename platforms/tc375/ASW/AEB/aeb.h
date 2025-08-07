@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include "Ifx_Types.h"
 
+#include "ToF.h"
+
 #define AEB_STATE_NORMAL    0
 #define AEB_STATE_EMERGENCY 1
 
@@ -70,8 +72,7 @@
 - 실제 제동거리 = 시작거리 - 종료거리
 */
 
-bool AEB_IsEmergencyBrakingRequired(void);
-int AEB_UpdateState(uint64 interval_us);
+int AEB_UpdateState(const ToFData_t *tof_latest_data, uint64 interval_us);
 int AEB_GetState(void);
 
 /*테스트 및 디버깅용*/

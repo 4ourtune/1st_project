@@ -4,10 +4,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-// #include "ToF.h"
+#include "ToF.h"
 #include "eru.h"
 #include "stm.h"
-#include "emer_light.h"
 
 
 #define CYCLE_DELAY_US                100000    // 100ms
@@ -51,7 +50,7 @@ float APS_CalculateSpaceSize(uint64_t start_time, uint64_t end_time);
 
 // // APS 명령 및 상태 관리 함수
 void Calc_APS_Result(void);
-int Update_APS_Result(uint64_t interval_us);
+int Update_APS_Result (ToFData_t *tof_latest_data, UltrasonicData_t ult_latest_data[], uint64 interval_us);
 // int APS_CalculateSteeringFromSensor(int sensor_distance);
 
 // APS 외부 인터페이스

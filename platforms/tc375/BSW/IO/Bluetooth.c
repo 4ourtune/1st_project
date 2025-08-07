@@ -1,21 +1,42 @@
 #include "Bluetooth.h"
 
-static str_queue_t bluetooth_rx_queue;
+static ByteQueue bluetooth_rx_queue;
+static int cur_str_len = 0; // 현재 수신 중인 문자열 길이
 
-void bluetooth_rx_queue_init (void)
+void Bluetooth_Init (void)
 {
-    str_queue_init(&bluetooth_rx_queue);
+    ByteQueue_Init(&bluetooth_rx_queue, BLUETOOTH_BUFFER_SIZE);
+    cur_str_len = 0;
 }
 
-int bluetooth_rx_queue_push_char (char ch)
+int Bluetooth_RxHandler (uint8_t byte)
 {
-    if (ch == '\n')
+    if (byte == '\n') // 필터링
         return 0;
-    str_queue_push_char(&bluetooth_rx_queue, ch);
+
+    ByteQueue_Push(&bluetooth_rx_queue, byte);
     return 1;
 }
 
-int bluetooth_rx_queue_pull_string (char *dst, int dst_size)
+int Bluetooth_RxQueue_PopString (char *dst, int dst_size)
 {
-    return str_queue_pull_string(&bluetooth_rx_queue, dst, dst_size);
+    uint8_t byte;
+
+    if (ByteQueue_Pop(&bluetooth_rx_queue, &byte))
+    {
+        dst[cur_str_len++] = (char) byte;
+
+        if (byte == '\0') // 문자열 끝
+        {
+            cur_str_len = 0;
+            return 1;
+        }
+        else if (cur_str_len >= dst_size) // 버퍼 크기 초과
+        {
+            cur_str_len = 0;
+            dst[0] = '\0';
+        }
+    }
+
+    return 0;
 }

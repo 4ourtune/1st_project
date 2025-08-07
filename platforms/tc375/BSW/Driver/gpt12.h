@@ -7,11 +7,19 @@
 #include <IfxPort.h>
 
 #include "isr_priority.h"
-#include "Ultrasonic.h"
+#include "GPIO.h"
+#include "stm.h"
+
+#include "Buzzer.h"
+
+#define ULTRASONIC_TRIG_HIGH_DURATION 1000 // 1000us = 1ms
 
 void Gpt1_Init (void);
-void Gpt2_init(void);
-void runGpt12_T6(void);
-void stopGpt12_T6(void);
+void Run_Gpt12_T3 (void);
+void Stop_Gpt12_T3 (void);
+
+void Gpt2_Init (void);
+void Run_Gpt12_T6 (void);
+void Stop_Gpt12_T6 (void);
 
 #endif /* BSW_DRIVER_GPT12_H_ */
