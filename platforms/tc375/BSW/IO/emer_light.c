@@ -1,4 +1,4 @@
-#include <emer_light.h>
+#include "emer_light.h"
 #include "GPIO.h"
 #include "Buzzer.h"
 #include "stm.h"
@@ -114,7 +114,8 @@ void Emer_Light_Blink(void)
 
         led_on = !led_on;
 
-        if (GPIO_GetLedState(1))
+        if (led_on)
+
         {
             Buzzer_on();   // LED 켜질 때 부저 ON
         }
@@ -126,11 +127,6 @@ void Emer_Light_Blink(void)
         last_toggle_time = now;
     }
 }
-
-// 디버깅용으로 GPIO_GetLedState() 값을 출력
-
-
-
 
 void Emer_Light_Off (void)
 {
