@@ -3,7 +3,7 @@
 //IFX_INTERRUPT(Asclin0RxIsrHandler, 0, ISR_PRIORITY_ASCLIN0_RX);
 //void Asclin0RxIsrHandler (void)
 //{
-//    char ch = Asclin0_InUart();
+//    unsigned char ch = Asclin0_InUart();
 //    Asclin0_OutUart(ch);
 //}
 
@@ -96,7 +96,7 @@ unsigned char Asclin0_InUart (void)
     return ch;
 }
 
-char Asclin0_InUartNonBlock (void)
+unsigned char Asclin0_InUartNonBlock (void)
 {
     unsigned char ch = 0;
     int res = Asclin0_PollUart(&ch);
@@ -144,8 +144,8 @@ int Asclin0_PollUart (unsigned char *chr)
 IFX_INTERRUPT(Asclin1RxIsrHandler, 0, ISR_PRIORITY_ASCLIN1_RX);
 void Asclin1RxIsrHandler (void)
 {
-    char ch = Asclin1_InUart();
-    bluetooth_rx_queue_push_char(ch);
+    unsigned char ch = Asclin1_InUart();
+    Bluetooth_RxHandler(ch);
 }
 
 /* Initialise asynchronous interface to operate at baudrate,8,n,1 */
@@ -155,7 +155,6 @@ void Asclin1_InitUart (void)
     /* set numerator and denominator for 9600 baudrate */
     unsigned int numerator = 48;
     unsigned int denominator = 3125;
-//    numerator = 576;
 
     /* RXA/P15.1, TX/P15.0 */
     /* Set TX/P15.0 to "output" and "high" */
@@ -211,9 +210,6 @@ void Asclin1_InitUart (void)
     src->B.CLRR = 1; /* clear request */
     MODULE_ASCLIN1.FLAGSENABLE.B.RFLE = 1; /* enable rx fifo fill level flag */
     src->B.SRE = 1; /* interrupt enable */
-
-    /* Init bluetooth rx queue */
-    bluetooth_rx_queue_init();
 }
 
 /* Send character CHR via the serial line */
@@ -242,7 +238,7 @@ unsigned char Asclin1_InUart (void)
     return ch;
 }
 
-char Asclin1_InUartNonBlock (void)
+unsigned char Asclin1_InUartNonBlock (void)
 {
     unsigned char ch = 0;
     int res = Asclin1_PollUart(&ch);
@@ -290,7 +286,7 @@ int Asclin1_PollUart (unsigned char *chr)
 IFX_INTERRUPT(Asclin2RxIsrHandler, 0, ISR_PRIORITY_ASCLIN2_RX);
 void Asclin2RxIsrHandler (void)
 {
-    uint8_t ch = Asclin2_InUart();
+    unsigned char ch = Asclin2_InUart();
     ToF_RxHandler(ch);
 }
 
@@ -299,8 +295,8 @@ void Asclin2_InitUart (void)
     /* set numerator and denominator for 921600 baudrate */
     unsigned int numerator = 2304;
     unsigned int denominator = 3125;
-    // ASCLIN2_ATX : P33.9
-    // ASCLIN2_ARXA : P33.8
+
+    // ASCLIN2:ATX to P33.9:ALT(2) Transmit output
     /* Set TX/P33.9 to "output" and "high" */
     MODULE_P33.IOCR8.B.PC9 = 0x12;
     MODULE_P33.OUT.B.P9 = 1;
@@ -312,8 +308,9 @@ void Asclin2_InitUart (void)
     /* read back for activating module */
     (void) MODULE_ASCLIN2.CLC.U;
 
+    // ASCLIN2:ARXE from P33.8:IN Receive input
     /* select RX as input pin */
-    MODULE_ASCLIN2.IOCR.B.ALTI = 4; // Select Alternate Input A
+    MODULE_ASCLIN2.IOCR.B.ALTI = 0x4; // Select Alternate Input E
 
     /* Program ASC2 */
     MODULE_ASCLIN2.CSR.U = 0;
@@ -380,6 +377,14 @@ unsigned char Asclin2_InUart (void)
         ;
 
     return ch;
+}
+
+unsigned char Asclin2_InUartNonBlock (void)
+{
+    unsigned char ch = 0;
+    int res = Asclin2_PollUart(&ch);
+
+    return res == 1 ? ch : -1;
 }
 
 /* Check the serial line if a character has been received.
