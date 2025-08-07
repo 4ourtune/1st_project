@@ -99,6 +99,31 @@ static int MotorController_MapJoystickValue (int value)
     return (value * 200 / 99) - 100;
 }
 
+static int MotorController_MapJoystickValueWithDeadzone (int value, int deadzone)
+{
+    if (value < 0)
+        value = 0;
+    if (value > 99)
+        value = 99;
+    
+    int center = 49;
+    int offset = value - center;
+    
+    if (offset > -deadzone && offset < deadzone)
+        return 0;
+    
+    if (offset > 0)
+        offset = offset - deadzone;
+    else
+        offset = offset + deadzone;
+    
+    int max_offset = center - deadzone;
+    if (max_offset <= 0)
+        max_offset = 1;
+    
+    return (offset * 100) / max_offset;
+}
+
 bool MotorController_ProcessJoystickInput (int x, int y)
 {
     if (x < 0 || x >= 100 || y < 0 || y >= 100)
@@ -106,8 +131,10 @@ bool MotorController_ProcessJoystickInput (int x, int y)
         return false;
     }
     
-    int x_speed = MotorController_MapJoystickValue(x);
+    int x_speed = MotorController_MapJoystickValueWithDeadzone(x, 8);
     int y_speed = MotorController_MapJoystickValue(y);
+    
+    x_speed = (x_speed * 60) / 100;
     
     int left_speed = y_speed + x_speed;
     int right_speed = y_speed - x_speed;
