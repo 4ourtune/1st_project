@@ -1,8 +1,9 @@
 # Eclipse/ADS specific
-.settings/
 .metadata/
 .ads/
-*.launch
+.settings/
+.cproject
+.project
 
 # Build artifacts
 TriCore Debug (TASKING)/
@@ -16,9 +17,15 @@ output/
 *.lst
 *.log
 
+# Config
+Configurations/
+Libraries/
+
 # OS-specific
 .DS_Store
 Thumbs.db
+Lcf_Gnuc_Tricore_Tc.lsl
+Lcf_Tasking_Tricore_Tc.lsl
 
 # Editor-specific
 *.swp
@@ -27,3 +34,6 @@ Thumbs.db
 # cppcheck
 tools/cppcheck
 cppcheck_report.txt
+
+# test
+test/build/
