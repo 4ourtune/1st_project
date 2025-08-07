@@ -69,7 +69,7 @@ int Get_APS_State(void)
 static APS_WallSpaceState_t APS_AnalyzeSpace(int distance)
 {
     if (!wall_reference_initialized) {
-        my_printf("[APS] Wall reference initialized: %d\n", distance);
+//        my_printf("[APS] Wall reference initialized: %d\n", distance);
         wall_reference_distance = distance;
         wall_reference_initialized = true;
         return WALL_DETECTED;
@@ -91,21 +91,21 @@ static void APS_ProcessStateTransition(APS_WallSpaceState_t new_state)
 {
     if (current_state != new_state) {
         // 상태 변경 문자열로 처리
-        my_printf("[APS] State transition: %s -> %s\n",
-            (current_state == WALL_DETECTED) ? "WALL_DETECTED" : "SPACE_DETECTED",
-            (new_state == WALL_DETECTED) ? "WALL_DETECTED" : "SPACE_DETECTED");
+//        my_printf("[APS] State transition: %s -> %s\n",
+//            (current_state == WALL_DETECTED) ? "WALL_DETECTED" : "SPACE_DETECTED",
+//            (new_state == WALL_DETECTED) ? "WALL_DETECTED" : "SPACE_DETECTED");
 
         if (current_state == WALL_DETECTED) {
             space_start_time = getTimeUs();
             current_state = SPACE_DETECTED;
-            my_printf("[APS] Space start time: %u\n", getTimeUs());
+//            my_printf("[APS] Space start time: %u\n", getTimeUs());
         }
         else if (current_state == SPACE_DETECTED) {
             space_end_time = getTimeUs();
             measured_space_size = APS_CalculateSpaceSize(space_start_time, space_end_time);
             current_state = WALL_DETECTED;
-            my_printf("[APS] Space end time: %u\n", getTimeUs());
-            my_printf("[APS] Measured space size: %.1f\n", measured_space_size);
+//            my_printf("[APS] Space end time: %u\n", getTimeUs());
+//            my_printf("[APS] Measured space size: %.1f\n", measured_space_size);
         }
     }
 }
@@ -130,7 +130,7 @@ static bool APS_DetectParkingSpace(void)
 
     if (measured_space_size >= MIN_PARKING_SPACE_CM) {
         // measured_space_size 출력
-        my_printf("[APS] Parking space detected: %.1f cm\n", measured_space_size);
+//        my_printf("[APS] Parking space detected: %.1f cm\n", measured_space_size);
         return true;
     }
     return false;
@@ -149,14 +149,14 @@ int Update_APS_Result (ToFData_t *tof_latest_data, UltrasonicData_t ult_latest_d
         sense_time[i + 1] = ult_latest_data[i].received_time_us;
     }
 
-    uint64 cur_time = getTimeUs();
-
-    for (int i = 1; i < SENSOR_DATA_COUNT; i++)
-    {
-        uint64 sensor_delay = cur_time - sense_time[i];
-        if (sensor_delay > interval_us)
-            return 0;
-    }
+//    uint64 cur_time = getTimeUs();
+//
+//    for (int i = 1; i < SENSOR_DATA_COUNT; i++)
+//    {
+//        uint64 sensor_delay = cur_time - sense_time[i];
+//        if (sensor_delay > interval_us)
+//            return 0;
+//    }
 
     Calc_APS_Result();
     return 1;
@@ -202,8 +202,8 @@ void Calc_APS_Result (void)
                 int y_speed = APS_Test_MapJoystickValue(result_y);
                 int left_speed = y_speed + x_speed;
                 int right_speed = y_speed - x_speed;
-                my_printf("[APS] Joystick X:%d Y:%d | Mapped X:%d Y:%d | Left:%d Right:%d\n",
-                          result_x, result_y, x_speed, y_speed, left_speed, right_speed);
+//                my_printf("[APS] Joystick X:%d Y:%d | Mapped X:%d Y:%d | Left:%d Right:%d\n",
+//                          result_x, result_y, x_speed, y_speed, left_speed, right_speed);
 
 
                 return;
@@ -214,7 +214,7 @@ void Calc_APS_Result (void)
                 result_x = 50;      // 중립
                 result_y = 50;      // 정지`
                 current_phase = PHASE_COMPLETED;
-                my_printf("[APS] Parking completed! Rear distance: %d\n", rear_distance);
+//                my_printf("[APS] Parking completed! Rear distance: %d\n", rear_distance);
                 return;
             }
 
@@ -223,21 +223,21 @@ void Calc_APS_Result (void)
                 result_x = 64;      // 우회전 (값 줄였음)
                 result_y = 45;      // 후진
                 rotate_counter++;
-                my_printf("[APS] Rotating: %d/%d, X: %d, Y: %d\n", rotate_counter, ROTATE_LIMIT, result_x, result_y);
+//                my_printf("[APS] Rotating: %d/%d, X: %d, Y: %d\n", rotate_counter, ROTATE_LIMIT, result_x, result_y);
 
                 int x_speed = APS_Test_MapJoystickValue(result_x);
                 int y_speed = APS_Test_MapJoystickValue(result_y);
                 int left_speed = y_speed + x_speed;
                 int right_speed = y_speed - x_speed;
-                my_printf("[APS] Joystick X:%d Y:%d | Mapped X:%d Y:%d | Left:%d Right:%d\n",
-                          result_x, result_y, x_speed, y_speed, left_speed, right_speed);
+//                my_printf("[APS] Joystick X:%d Y:%d | Mapped X:%d Y:%d | Left:%d Right:%d\n",
+//                          result_x, result_y, x_speed, y_speed, left_speed, right_speed);
                 // left_speed = 20, right_speed = -40 이려면 result_x = 70, result_y = 45
             } else {
                 // 3. 회전 완료 후 센서 기반 조향으로 후진
                 result_x = 50;      // 중립
                 result_y = 35;      // 후진
                 // rear_distance 값을 찍어봄
-                my_printf("[APS] Rotate completed, ready to reverse. Rear distance: %d\n", rear_distance);
+//                my_printf("[APS] Rotate completed, ready to reverse. Rear distance: %d\n", rear_distance);
                 // my_printf("[APS] After rotate, Steering: %d, Y: %d\n", result_x, result_y);
             }
 
@@ -263,7 +263,7 @@ void Calc_APS_Result (void)
             result_y = 50;
             return;
     }
-    my_printf("[APS] Phase: %d, X: %d, Y: %d, Done: %d\n", current_phase, result_x, result_y, is_APS_done);
+//    my_printf("[APS] Phase: %d, X: %d, Y: %d, Done: %d\n", current_phase, result_x, result_y, is_APS_done);
 }
 
 /**
@@ -298,7 +298,7 @@ void Get_APS_Result (int *res_x, int *res_y, int *is_done)
 void Set_APS_State (int state)
 {
     if (state < 0 || state > 1) {
-        my_printf("[APS] Invalid state value: %d\n", state);
+//        my_printf("[APS] Invalid state value: %d\n", state);
         return;
     }
     aps_state = state;
